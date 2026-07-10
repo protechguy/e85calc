@@ -1,1 +1,66 @@
-# e85calc
+# 🏁 E85 Blend Lab
+
+A sleek, motorsports-themed **E85 blend calculator**. Tell it your tank size,
+how much fuel is in the tank, what pump gas you're mixing with, and your target
+ethanol blend — it gives you pit orders: exactly how many gallons of E85 and
+pump gas to add.
+
+## Features
+
+- **Blend math that handles the real world** — accounts for the fuel already in
+  your tank (and its ethanol content), seasonal E85 variation (E51–E83 at the
+  pump), and E0/E10/E15/custom pump gas.
+- **Live gauge & mix bar** — see your resulting blend and tank composition
+  update as you drag the sliders.
+- **Vehicle picker (optional)** — select year/make/model to auto-fill your tank
+  size from a curated dataset of popular platforms, with a badge showing
+  whether the platform was offered as a **factory flex-fuel vehicle** or will
+  likely need mods (full compatibility lookup planned for phase 2).
+- **Honest clamping** — if your target is unreachable (tank already too rich or
+  too full of pump gas), it tells you and shows the best blend you *can* reach.
+- Zero dependencies, zero build step — pure HTML/CSS/JS. Works offline.
+
+## Run it
+
+Open `index.html` in a browser, or serve the folder:
+
+```sh
+python3 -m http.server 8000
+# → http://localhost:8000
+```
+
+Deploys as-is to GitHub Pages, Netlify, or any static host.
+
+## Tests
+
+Blend-math unit tests run in plain Node:
+
+```sh
+node test/calc.test.js
+```
+
+## How the math works
+
+Given a tank of size `T` with `v` gallons at ethanol fraction `e₀`, filling the
+remaining space with `x` gallons of E85 (fraction `e₁`) and `y` gallons of pump
+gas (fraction `e₂`) to hit target `t`:
+
+```
+x + y = T − v
+(v·e₀ + x·e₁ + y·e₂) / T = t
+⇒ x = (T·t − v·e₀ − (T−v)·e₂) / (e₁ − e₂)
+```
+
+Results are clamped to what's physically possible and the achieved blend is
+reported.
+
+## Roadmap (phase 2)
+
+- Full factory E85 compatibility lookup per year/make/model/engine
+- Required-modification guidance for non-flex-fuel platforms
+- Ethanol content tester integration / partial-fill mode
+
+---
+
+*Estimates only. Always verify tank capacity, fuel-system compatibility, and
+actual ethanol content before running high blends.*
