@@ -148,6 +148,32 @@
     </p>
   </section>
 
+  <!-- ══════════ COMPATIBILITY ══════════ -->
+  <section class="panel panel-compat" aria-labelledby="compat-title">
+    <h2 id="compat-title" class="panel-title">CAN IT RUN E85?</h2>
+    <p class="compat-intro">
+      Factory flex-fuel lookup, engine by engine — live from EPA fuel-economy
+      data covering every US-market vehicle since 1984.
+    </p>
+
+    <div class="veh-row compat-row">
+      <select id="compat-year" aria-label="Compatibility check: vehicle year">
+        <option value="">Year</option>
+      </select>
+      <select id="compat-make" aria-label="Compatibility check: vehicle make" disabled>
+        <option value="">Make</option>
+      </select>
+      <select id="compat-model" aria-label="Compatibility check: vehicle model" disabled>
+        <option value="">Model</option>
+      </select>
+    </div>
+
+    <p id="compat-status" class="compat-status" role="status" hidden></p>
+    <div id="compat-verdict" class="compat-verdict" hidden></div>
+    <ul id="compat-variants" class="compat-variants" hidden></ul>
+    <div id="compat-mods" class="compat-mods" hidden></div>
+  </section>
+
 </main>
 
 <footer class="site-footer">
@@ -156,5 +182,6 @@
 
 <script src="vehicles.js"></script>
 <script src="app.js"></script>
+<script src="compat.js"></script>
 </body>
 </html>

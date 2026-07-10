@@ -55,11 +55,26 @@ x + y = T − v
 Results are clamped to what's physically possible and the achieved blend is
 reported.
 
-## Roadmap (phase 2)
+## Compatibility lookup ("Can it run E85?")
 
-- Full factory E85 compatibility lookup per year/make/model/engine
-- Required-modification guidance for non-flex-fuel platforms
+The compatibility panel checks whether a vehicle was offered as a **factory
+flex-fuel vehicle**, engine variant by engine variant, using the free
+[EPA fueleconomy.gov web services](https://www.fueleconomy.gov/feg/ws/)
+(every US-market vehicle since 1984, no API key). Verdicts:
+
+- **Factory flex-fuel** — every version of the model is E85-ready
+- **Flex-fuel on some engines** — per-engine badges show which
+- **Not factory E85** — with guidance on the typical modifications
+  (ethanol-calibrated tune or flex-fuel kit, higher-flow injectors,
+  E85-rated pump, compatible lines/seals)
+
+If the EPA service is unreachable, the panel falls back to the built-in
+curated dataset and says so.
+
+## Roadmap
+
 - Ethanol content tester integration / partial-fill mode
+- Pull tank size from the compatibility lookup's vehicle selection
 
 ---
 
