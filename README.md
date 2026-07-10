@@ -1,7 +1,8 @@
 # 🚘 E85 Blend Lab
 
-A sleek, street-car-styled **E85 blend calculator** — night-meet aesthetic with
-glassy panels and neon underglow. Tell it your tank size, how much fuel is in
+A sleek, street-car-styled **E85 blend calculator** — retro California neon
+aesthetic with glassy panels, magenta/teal neon, and warm sunset accents.
+Tell it your tank size, how much fuel is in
 the tank, what pump gas you're mixing with, and your target ethanol blend — it
 tells you exactly how many gallons of E85 and pump gas to add.
 
