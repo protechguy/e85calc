@@ -160,7 +160,7 @@ function setGauge(frac) {
 
 /* ── Recalculate & render ─────────────────────────────────────────────── */
 const STATUS_TEXT = {
-  ok: { cls: "ok", msg: "Blend target locked in. Pump the amounts below. 🏁" },
+  ok: { cls: "ok", msg: "Dialed in. Pump the amounts below and roll out. ✨" },
   tank_full: { cls: "warn", msg: "Tank is already full — burn some fuel before blending." },
   target_below: {
     cls: "warn",

@@ -7,21 +7,18 @@
 <meta name="description" content="Motorsports-grade E85 blend calculator: dial in your target ethanol mix from your tank size, fuel level, and pump fuel.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🏁</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🚘</text></svg>">
 </head>
 <body>
-
-<div class="track-stripes" aria-hidden="true"></div>
 
 <header class="site-header">
   <div class="header-inner">
     <div class="logo">
-      <span class="logo-flag" aria-hidden="true"></span>
-      <h1><span class="logo-e85">E85</span> BLEND LAB</h1>
+      <h1><span class="plate">E85</span> BLEND LAB</h1>
     </div>
-    <p class="tagline">DIAL IN YOUR MIX &nbsp;•&nbsp; RUN IT AT THE PUMP</p>
+    <p class="tagline">STREET BLENDS &nbsp;•&nbsp; DIALED IN &nbsp;•&nbsp; SHOW READY</p>
   </div>
 </header>
 
@@ -29,7 +26,7 @@
 
   <!-- ══════════ INPUTS ══════════ -->
   <section class="panel panel-inputs" aria-labelledby="inputs-title">
-    <h2 id="inputs-title" class="panel-title"><span class="num">01</span> SETUP</h2>
+    <h2 id="inputs-title" class="panel-title">SETUP</h2>
 
     <fieldset class="veh-picker">
       <legend>VEHICLE <span class="optional">(optional — auto-fills tank size)</span></legend>
@@ -92,10 +89,16 @@
 
   <!-- ══════════ RESULTS ══════════ -->
   <section class="panel panel-results" aria-labelledby="results-title">
-    <h2 id="results-title" class="panel-title"><span class="num">02</span> PIT ORDERS</h2>
+    <h2 id="results-title" class="panel-title">THE MIX</h2>
 
     <div class="gauge-wrap">
       <svg class="gauge" viewBox="0 0 200 170" role="img" aria-label="Resulting ethanol blend gauge">
+        <defs>
+          <linearGradient id="gauge-grad" x1="0%" y1="100%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#3ee6e0"/>
+            <stop offset="100%" stop-color="#9d6bff"/>
+          </linearGradient>
+        </defs>
         <path class="gauge-track" d="M 35.05 132.5 A 75 75 0 1 1 164.95 132.5" />
         <path id="gauge-arc" class="gauge-fill" d="M 35.05 132.5 A 75 75 0 1 1 164.95 132.5" />
         <g class="gauge-ticks" aria-hidden="true">
@@ -140,15 +143,14 @@
 
     <p class="fine-print">
       Full tank blend: <strong id="final-blend">E30</strong>. Estimates only — always verify your
-      fuel system, tune, and ethanol content before running high blends. 🏎️
+      fuel system, tune, and ethanol content before running high blends.
     </p>
   </section>
 
 </main>
 
 <footer class="site-footer">
-  <span class="checker" aria-hidden="true"></span>
-  <p>E85 BLEND LAB — built for the paddock. Not fueling advice; verify capacities &amp; compatibility in your owner's manual.</p>
+  <p>E85 BLEND LAB — tuned for the street. Not fueling advice; verify capacities &amp; compatibility in your owner's manual.</p>
 </footer>
 
 <script src="vehicles.js"></script>
