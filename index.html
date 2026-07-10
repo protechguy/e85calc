@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E85 Blend Lab — Ethanol Mix Calculator</title>
+<meta name="description" content="Retro California neon E85 blend calculator: dial in your target ethanol mix from your tank size, fuel level, and pump fuel.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🚘</text></svg>">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <h1><span class="plate">E85</span> BLEND LAB</h1>
+    </div>
+    <p class="tagline">STREET BLENDS &nbsp;•&nbsp; DIALED IN &nbsp;•&nbsp; SHOW READY</p>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ══════════ INPUTS ══════════ -->
+  <section class="panel panel-inputs" aria-labelledby="inputs-title">
+    <h2 id="inputs-title" class="panel-title">SETUP</h2>
+
+    <fieldset class="veh-picker">
+      <legend>VEHICLE <span class="optional">(optional — auto-fills tank size)</span></legend>
+      <div class="veh-row">
+        <select id="veh-year" aria-label="Vehicle year">
+          <option value="">Year</option>
+        </select>
+        <select id="veh-make" aria-label="Vehicle make" disabled>
+          <option value="">Make</option>
+        </select>
+        <select id="veh-model" aria-label="Vehicle model" disabled>
+          <option value="">Model</option>
+        </select>
+      </div>
+      <div id="veh-note" class="veh-note" role="status"></div>
+    </fieldset>
+
+    <div class="field">
+      <label for="tank-size">TANK SIZE <span class="hint">US gallons</span></label>
+      <input type="number" id="tank-size" min="1" max="60" step="0.1" value="16" inputmode="decimal">
+    </div>
+
+    <div class="field">
+      <label for="fuel-level">FUEL CURRENTLY IN TANK <output id="fuel-level-out" for="fuel-level">25% (4.0 gal)</output></label>
+      <input type="range" id="fuel-level" min="0" max="100" step="1" value="25">
+    </div>
+
+    <div class="field">
+      <label for="current-eth">ETHANOL % OF FUEL IN TANK <span class="hint">what's already in there</span></label>
+      <input type="number" id="current-eth" min="0" max="100" step="1" value="10" inputmode="numeric">
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="pump-type">PUMP GAS TYPE</label>
+        <select id="pump-type">
+          <option value="e10" selected>E10 (most pump gas)</option>
+          <option value="e0">E0 (ethanol-free)</option>
+          <option value="e15">E15</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="pump-eth">PUMP ETHANOL %</label>
+        <input type="number" id="pump-eth" min="0" max="100" step="1" value="10" disabled inputmode="numeric">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="e85-eth">E85 PUMP ACTUAL ETHANOL <output id="e85-eth-out" for="e85-eth">E85</output></label>
+      <input type="range" id="e85-eth" min="51" max="98" step="1" value="85">
+      <p class="hint-block">“E85” at the pump legally ranges E51–E83 by season — test it if you can.</p>
+    </div>
+
+    <div class="field field-target">
+      <label for="target-eth">TARGET BLEND <output id="target-eth-out" for="target-eth">E30</output></label>
+      <input type="range" id="target-eth" min="10" max="98" step="1" value="30" class="target-slider">
+    </div>
+  </section>
+
+  <!-- ══════════ RESULTS ══════════ -->
+  <section class="panel panel-results" aria-labelledby="results-title">
+    <h2 id="results-title" class="panel-title">THE MIX</h2>
+
+    <div class="gauge-wrap">
+      <svg class="gauge" viewBox="0 0 200 170" role="img" aria-label="Resulting ethanol blend gauge">
+        <defs>
+          <linearGradient id="gauge-grad" x1="0%" y1="100%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#3ee6e0"/>
+            <stop offset="50%" stop-color="#ff8a4d"/>
+            <stop offset="100%" stop-color="#ff5585"/>
+          </linearGradient>
+        </defs>
+        <path class="gauge-track" d="M 35.05 132.5 A 75 75 0 1 1 164.95 132.5" />
+        <path id="gauge-arc" class="gauge-fill" d="M 35.05 132.5 A 75 75 0 1 1 164.95 132.5" />
+        <g class="gauge-ticks" aria-hidden="true">
+          <line x1="100" y1="20" x2="100" y2="30"/>
+          <line x1="35.05" y1="132.5" x2="43.7" y2="127.5"/>
+          <line x1="164.95" y1="132.5" x2="156.3" y2="127.5"/>
+          <line x1="35" y1="57.5" x2="43.7" y2="62.5"/>
+          <line x1="165" y1="57.5" x2="156.3" y2="62.5"/>
+        </g>
+        <line id="gauge-needle" class="gauge-needle" x1="100" y1="95" x2="100" y2="34"/>
+        <circle class="gauge-hub" cx="100" cy="95" r="7"/>
+      </svg>
+      <div class="gauge-readout">
+        <span id="gauge-value" class="gauge-big">E30</span>
+        <span class="gauge-label">RESULTING BLEND</span>
+      </div>
+    </div>
+
+    <div class="orders">
+      <div class="order-card order-e85">
+        <span class="order-label">ADD E85</span>
+        <span id="add-e85" class="order-value">0.00<span class="unit"> gal</span></span>
+      </div>
+      <div class="order-card order-gas">
+        <span class="order-label">ADD PUMP GAS</span>
+        <span id="add-gas" class="order-value">0.00<span class="unit"> gal</span></span>
+      </div>
+    </div>
+
+    <div class="mix-bar" aria-hidden="true">
+      <div id="mix-existing" class="mix-seg seg-existing" title="Fuel already in tank"></div>
+      <div id="mix-e85" class="mix-seg seg-e85" title="E85 to add"></div>
+      <div id="mix-gas" class="mix-seg seg-gas" title="Pump gas to add"></div>
+    </div>
+    <div class="mix-legend">
+      <span><i class="dot dot-existing"></i>IN TANK</span>
+      <span><i class="dot dot-e85"></i>E85</span>
+      <span><i class="dot dot-gas"></i>PUMP GAS</span>
+    </div>
+
+    <p id="status-msg" class="status ok" role="status"></p>
+
+    <p class="fine-print">
+      Full tank blend: <strong id="final-blend">E30</strong>. Estimates only — always verify your
+      fuel system, tune, and ethanol content before running high blends.
+    </p>
+  </section>
+
+  <!-- ══════════ COMPATIBILITY ══════════ -->
+  <section class="panel panel-compat" aria-labelledby="compat-title">
+    <h2 id="compat-title" class="panel-title">CAN IT RUN E85?</h2>
+    <p class="compat-intro">
+      Factory flex-fuel lookup, engine by engine — live from EPA fuel-economy
+      data covering every US-market vehicle since 1984.
+    </p>
+
+    <div class="veh-row compat-row">
+      <select id="compat-year" aria-label="Compatibility check: vehicle year">
+        <option value="">Year</option>
+      </select>
+      <select id="compat-make" aria-label="Compatibility check: vehicle make" disabled>
+        <option value="">Make</option>
+      </select>
+      <select id="compat-model" aria-label="Compatibility check: vehicle model" disabled>
+        <option value="">Model</option>
+      </select>
+    </div>
+
+    <p id="compat-status" class="compat-status" role="status" hidden></p>
+    <div id="compat-verdict" class="compat-verdict" hidden></div>
+    <ul id="compat-variants" class="compat-variants" hidden></ul>
+    <div id="compat-mods" class="compat-mods" hidden></div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>E85 BLEND LAB — tuned for the street. Not fueling advice; verify capacities &amp; compatibility in your owner's manual.</p>
+</footer>
+
+<script src="vehicles.js"></script>
+<script src="app.js"></script>
+<script src="compat.js"></script>
+</body>
+</html>
