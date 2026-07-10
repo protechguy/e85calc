@@ -5,8 +5,8 @@
    ═══════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --magenta: #ff3da0;        /* retro neon magenta */
-  --magenta-hot: #ff8ac6;
+  --magenta: #ff5585;        /* warm coral-magenta neon */
+  --magenta-hot: #ff9bb0;
   --sunset: #ff8a4d;         /* sunset orange */
   --teal: #3ee6e0;          /* neon teal */
   --teal-deep: #19b8b3;
@@ -34,8 +34,8 @@ body {
   background:
     /* neon underglow washes */
     radial-gradient(1000px 480px at 85% -8%, #12454d66, transparent 62%),
-    radial-gradient(1100px 560px at 8% 108%, #6e1f5259, transparent 60%),
-    radial-gradient(700px 300px at 50% 115%, #ff3da02e, transparent 70%),
+    radial-gradient(1100px 560px at 8% 108%, #6e1f3859, transparent 60%),
+    radial-gradient(700px 300px at 50% 115%, #ff55852e, transparent 70%),
     radial-gradient(900px 380px at 72% 112%, #ff8a4d21, transparent 65%),
     /* fine asphalt grain */
     repeating-linear-gradient(0deg, #ffffff05 0 1px, transparent 1px 3px),
@@ -51,7 +51,7 @@ body::after {
   background: linear-gradient(90deg, transparent, var(--magenta) 28%, var(--sunset) 50%, var(--teal) 72%, transparent);
   filter: blur(.5px);
   opacity: .8;
-  box-shadow: 0 -6px 24px #ff3da055, 0 -2px 10px #3ee6e044;
+  box-shadow: 0 -6px 24px #ff558555, 0 -2px 10px #3ee6e044;
   pointer-events: none;
   z-index: 2;
 }
@@ -77,12 +77,12 @@ body::after {
   border: 2px solid var(--magenta);
   border-radius: 9px;
   color: var(--magenta-hot);
-  background: #2b1024;
+  background: #2b1018;
   letter-spacing: .1em;
   box-shadow:
-    0 0 18px #ff3da059,
-    inset 0 0 14px #ff3da02b;
-  text-shadow: 0 0 12px #ff3da0aa;
+    0 0 18px #ff558559,
+    inset 0 0 14px #ff55852b;
+  text-shadow: 0 0 12px #ff5585aa;
 }
 
 .logo h1 {
@@ -141,7 +141,7 @@ body::after {
   position: absolute;
   left: 8%; right: 8%; bottom: -14px;
   height: 26px;
-  background: radial-gradient(50% 100% at 50% 0%, #ff3da030, transparent 75%);
+  background: radial-gradient(50% 100% at 50% 0%, #ff558530, transparent 75%);
   filter: blur(6px);
   pointer-events: none;
 }
@@ -169,7 +169,7 @@ body::after {
   margin-top: 10px;
   border-radius: 2px;
   background: linear-gradient(90deg, var(--magenta), var(--sunset), var(--teal));
-  box-shadow: 0 0 10px #ff3da066;
+  box-shadow: 0 0 10px #ff558566;
 }
 
 /* ── Vehicle picker ─────────────────────────────────────────────────── */
@@ -269,7 +269,7 @@ input[type="number"], select {
 
 input[type="number"]:focus, select:focus {
   border-color: var(--magenta);
-  box-shadow: 0 0 0 3px #ff3da02e, 0 0 14px #ff3da033;
+  box-shadow: 0 0 0 3px #ff55852e, 0 0 14px #ff558533;
 }
 
 input:disabled, select:disabled { opacity: .45; }
@@ -287,7 +287,7 @@ input[type="range"] {
 }
 
 input[type="range"]:focus-visible {
-  box-shadow: 0 0 0 3px #ff3da02e;
+  box-shadow: 0 0 0 3px #ff55852e;
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -297,7 +297,7 @@ input[type="range"]::-webkit-slider-thumb {
   background: radial-gradient(circle at 35% 35%, #fff, #d9dcef 45%, #8f93ad);
   border: 3px solid var(--magenta);
   cursor: pointer;
-  box-shadow: 0 0 14px #ff3da088;
+  box-shadow: 0 0 14px #ff558588;
 }
 
 input[type="range"]::-moz-range-thumb {
@@ -306,10 +306,10 @@ input[type="range"]::-moz-range-thumb {
   background: #eceef8;
   border: 3px solid var(--magenta);
   cursor: pointer;
-  box-shadow: 0 0 14px #ff3da088;
+  box-shadow: 0 0 14px #ff558588;
 }
 
-.target-slider { background: linear-gradient(90deg, #1d4a48, #7a4327, #8f2360); }
+.target-slider { background: linear-gradient(90deg, #1d4a48, #7a4327, #8f2f4a); }
 
 /* ── Gauge ──────────────────────────────────────────────────────────── */
 .gauge-wrap { position: relative; max-width: 340px; margin: 0 auto 8px; }
@@ -330,7 +330,7 @@ input[type="range"]::-moz-range-thumb {
   stroke-linecap: round;
   stroke-dasharray: 314;
   stroke-dashoffset: 314;
-  filter: drop-shadow(0 0 9px #ff3da077);
+  filter: drop-shadow(0 0 9px #ff558577);
   transition: stroke-dashoffset .35s cubic-bezier(.2,.8,.3,1);
 }
 
@@ -362,7 +362,7 @@ input[type="range"]::-moz-range-thumb {
   font-weight: 400;
   font-size: 2.4rem;
   letter-spacing: .05em;
-  text-shadow: 0 0 30px #ff3da066;
+  text-shadow: 0 0 30px #ff558566;
 }
 
 .gauge-label {
@@ -389,7 +389,7 @@ input[type="range"]::-moz-range-thumb {
   background: linear-gradient(180deg, #ffffff08, transparent 55%), var(--panel-deep);
 }
 
-.order-e85 { border-color: #ff3da055; box-shadow: 0 0 18px #ff3da01e, inset 0 1px 0 #ffffff10; }
+.order-e85 { border-color: #ff558555; box-shadow: 0 0 18px #ff55851e, inset 0 1px 0 #ffffff10; }
 .order-gas { border-color: #3ee6e04d; box-shadow: 0 0 18px #3ee6e01a, inset 0 1px 0 #ffffff10; }
 
 .order-label {
@@ -407,7 +407,7 @@ input[type="range"]::-moz-range-thumb {
   font-size: 1.55rem;
 }
 
-.order-e85 .order-value { color: var(--magenta-hot); text-shadow: 0 0 16px #ff3da055; }
+.order-e85 .order-value { color: var(--magenta-hot); text-shadow: 0 0 16px #ff558555; }
 .order-gas .order-value { color: var(--teal); text-shadow: 0 0 16px #3ee6e044; }
 
 .order-value .unit, .unit {
@@ -430,7 +430,7 @@ input[type="range"]::-moz-range-thumb {
 
 .mix-seg { transition: width .35s cubic-bezier(.2,.8,.3,1); }
 .seg-existing { background: #454b6b; }
-.seg-e85 { background: linear-gradient(180deg, var(--magenta-hot), #d61f8d); }
+.seg-e85 { background: linear-gradient(180deg, var(--magenta-hot), #e03e70); }
 .seg-gas { background: linear-gradient(180deg, #6ff2ed, var(--teal-deep)); }
 
 .mix-legend {
@@ -451,7 +451,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .dot-existing { background: #454b6b; }
-.dot-e85 { background: var(--magenta); box-shadow: 0 0 6px #ff3da088; }
+.dot-e85 { background: var(--magenta); box-shadow: 0 0 6px #ff558588; }
 .dot-gas { background: var(--teal); box-shadow: 0 0 6px #3ee6e088; }
 
 /* ── Status & fine print ────────────────────────────────────────────── */
