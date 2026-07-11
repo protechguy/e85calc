@@ -236,17 +236,17 @@ async function epaMenu(path) {
   const VERDICTS = {
     all: {
       cls: "good",
-      title: "⚡ Factory flex-fuel",
+      title: `${ICONS.bolt} Factory flex-fuel`,
       body: "Every version of this model came E85-ready from the factory. Fill up and go — no mods needed.",
     },
     some: {
       cls: "mixed",
-      title: "⚡ Flex-fuel on some engines",
+      title: `${ICONS.bolt} Flex-fuel on some engines`,
       body: "This model was offered both ways — check your engine below (a yellow fuel cap or door sticker usually confirms flex-fuel).",
     },
     none: {
       cls: "bad",
-      title: "🔧 Not factory E85",
+      title: `${ICONS.wrench} Not factory E85`,
       body: "No version of this model shipped flex-fuel. Running high ethanol blends means modifications:",
     },
   };
@@ -263,7 +263,7 @@ async function epaMenu(path) {
           ({ name, ffv }) => `
         <li class="variant ${ffv ? "is-ffv" : ""}">
           <span class="variant-name">${name}</span>
-          <span class="badge ${ffv ? "badge-ffv" : "badge-mod"}">${ffv ? "⚡ FLEX-FUEL" : "🔧 MODS NEEDED"}</span>
+          <span class="badge ${ffv ? "badge-ffv" : "badge-mod"}">${ffv ? `${ICONS.bolt} FLEX-FUEL` : `${ICONS.wrench} MODS NEEDED`}</span>
         </li>`
         )
         .join("");
@@ -291,7 +291,8 @@ async function epaMenu(path) {
       const tankInput = document.getElementById("tank-size");
       tankInput.value = match.tank;
       tankInput.dispatchEvent(new Event("input", { bubbles: true }));
-      document.querySelector(".panel-inputs").scrollIntoView({ behavior: "smooth", block: "start" });
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      document.querySelector(".panel-inputs").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     });
   }
 

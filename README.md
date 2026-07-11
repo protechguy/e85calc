@@ -21,7 +21,11 @@ tells you exactly how many gallons of E85 and pump gas to add.
   likely need mods (full compatibility lookup planned for phase 2).
 - **Honest clamping** — if your target is unreachable (tank already too rich or
   too full of pump gas), it tells you and shows the best blend you *can* reach.
-- Zero dependencies, zero build step — pure HTML/CSS/JS. Works offline.
+  Swapped or nonsense fuel inputs get called out instead of silently computed.
+- **Built for the pump** — installable PWA that works offline, remembers your
+  last setup, and shows a sticky live-result bar on phones so you can watch the
+  blend change while you drag sliders.
+- Zero dependencies, zero build step — pure HTML/CSS/JS.
 
 ## Run it
 

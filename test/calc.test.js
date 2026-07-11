@@ -57,11 +57,26 @@ const close = (a, b, eps = 1e-9) =>
   close(winter.finalEth, 0.30);
 }
 
-// Degenerate: pump and "E85" ethanol identical → no solution, clamps sanely.
+// Degenerate: pump and "E85" ethanol identical → flagged, clamps sanely.
 {
   const r = calcBlend({ tank: 16, currentGal: 0, currentEth: 0, pumpEth: 0.10, e85Eth: 0.10, targetEth: 0.30 });
+  assert.equal(r.status, "bad_mix");
   assert.ok(r.e85Gal >= 0 && r.gasGal >= 0);
   close(r.e85Gal + r.gasGal, 16);
+}
+
+// Swapped inputs: "pump gas" richer than the "E85" pump → flagged, all pump gas.
+{
+  const r = calcBlend({ tank: 16, currentGal: 4, currentEth: 0.10, pumpEth: 0.85, e85Eth: 0.70, targetEth: 0.30 });
+  assert.equal(r.status, "bad_mix");
+  close(r.e85Gal, 0);
+  close(r.gasGal, 12);
+}
+
+// A full or untouched tank still reports its own condition, not bad_mix.
+{
+  const r = calcBlend({ tank: 16, currentGal: 16, currentEth: 0.10, pumpEth: 0.10, e85Eth: 0.10, targetEth: 0.30 });
+  assert.equal(r.status, "tank_full");
 }
 
 /* ── Partial fill ── */

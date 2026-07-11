@@ -1,0 +1,19 @@
+{
+  "name": "E85 Blend Lab",
+  "short_name": "E85 Lab",
+  "description": "Dial in your target ethanol blend: tank size, fuel level, pump gas, seasonal E85 — it tells you exactly what to pump.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0c13",
+  "theme_color": "#0a0c13",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

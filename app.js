@@ -2,6 +2,13 @@
    E85 BLEND LAB — calculator logic + UI wiring
    ═══════════════════════════════════════════════════════════════════════ */
 
+/* Inline SVG icons (shared with compat.js via classic-script global scope).
+   Stroke icons inherit currentColor so they tint with their badge. */
+const ICONS = {
+  bolt: `<svg class="ico ico-solid" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5L13 2z"/></svg>`,
+  wrench: `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4.5 4.5 0 0 0-6 5.7L3 17.7A2.1 2.1 0 0 0 6 20.7l5.7-5.7a4.5 4.5 0 0 0 5.7-6L14 12.4 11.6 10l3.1-3.7z"/></svg>`,
+};
+
 /**
  * Core blend math.
  *
@@ -30,13 +37,16 @@ function calcBlend({ tank, currentGal, currentEth, pumpEth, e85Eth, targetEth, a
     ? (total * targetEth - currentGal * currentEth - add * pumpEth) / denom
     : 0;
 
-  let status = "ok"; // ok | target_below | target_above | tank_full | no_add
+  let status = "ok"; // ok | target_below | target_above | tank_full | no_add | bad_mix
   if (space === 0) {
     x = 0;
     status = "tank_full";
   } else if (add === 0) {
     x = 0;
     status = "no_add";
+  } else if (denom <= 0) {
+    x = 0; // "E85" is no richer than the pump gas — no blend can be steered
+    status = "bad_mix";
   } else if (x < 0) {
     x = 0; // even pure pump gas leaves the blend above target
     status = "target_below";
@@ -109,6 +119,10 @@ const EL_IDS = {
   testResult: "test-result",
   testUseE85: "test-use-e85",
   testUseTank: "test-use-tank",
+  quickbar: "quickbar",
+  qbBlend: "qb-blend",
+  qbE85: "qb-e85",
+  qbGas: "qb-gas",
 };
 
 const els = {}; // bound to DOM nodes in init()
@@ -170,9 +184,9 @@ function setVehicleNote(v) {
     return;
   }
   const badge = v.ffv
-    ? `<span class="badge badge-ffv">⚡ FACTORY FLEX-FUEL</span>
+    ? `<span class="badge badge-ffv">${ICONS.bolt} FACTORY FLEX-FUEL</span>
        <span class="badge-sub">Offered as E85-capable on select engines/trims — verify yours.</span>`
-    : `<span class="badge badge-mod">🔧 MODS LIKELY REQUIRED</span>
+    : `<span class="badge badge-mod">${ICONS.wrench} MODS LIKELY REQUIRED</span>
        <span class="badge-sub">Not a factory flex-fuel platform — high ethanol blends typically need tuning &amp; fuel-system upgrades.</span>`;
   els.vehNote.innerHTML =
     `<span class="badge-tank">TANK ≈ ${v.tank.toFixed(1)} GAL</span>${badge}
@@ -194,9 +208,13 @@ function setGauge(frac) {
 
 /* ── Recalculate & render ─────────────────────────────────────────────── */
 const STATUS_TEXT = {
-  ok: { cls: "ok", msg: "Dialed in. Pump the amounts below and roll out. ✨" },
+  ok: { cls: "ok", msg: "Dialed in. Pump the amounts above and roll out." },
   tank_full: { cls: "warn", msg: "Tank is already full — burn some fuel before blending." },
   no_add: { cls: "warn", msg: "Adding zero gallons — the blend stays at what's already in the tank." },
+  bad_mix: {
+    cls: "warn",
+    msg: "Pump-gas ethanol is at or above the E85 pump's — the two fuels can't steer the blend. Check those inputs (they may be swapped).",
+  },
   target_below: {
     cls: "warn",
     msg: "The fuel already in your tank is richer than the target — even topping off with pure pump gas lands above it. Shown is the leanest blend you can reach without draining.",
@@ -209,6 +227,16 @@ const STATUS_TEXT = {
 
 function fmtGal(g) {
   return `${g.toFixed(2)}<span class="unit"> gal</span>`;
+}
+
+const clampPct = (v) => Math.min(100, Math.max(0, parseFloat(v) || 0));
+
+/* Paint the filled portion of a slider track (see --fill in styles.css). */
+function syncSliderFill(el) {
+  const min = +el.min || 0;
+  const max = +el.max || 100;
+  const pct = max > min ? ((+el.value - min) / (max - min)) * 100 : 0;
+  el.style.setProperty("--fill", `${pct}%`);
 }
 
 function recalc() {
@@ -231,17 +259,18 @@ function recalc() {
   const inputs = {
     tank,
     currentGal,
-    currentEth: (parseFloat(els.currentEth.value) || 0) / 100,
-    pumpEth: (parseFloat(els.pumpEth.value) || 0) / 100,
+    currentEth: clampPct(els.currentEth.value) / 100,
+    pumpEth: clampPct(els.pumpEth.value) / 100,
     e85Eth: (+els.e85Eth.value) / 100,
     targetEth: (+els.target.value) / 100,
     addGal,
   };
 
-  // Live slider readouts
+  // Live slider readouts & track fills
   els.levelOut.textContent = `${levelPct}% (${currentGal.toFixed(1)} gal)`;
   els.e85EthOut.textContent = `E${els.e85Eth.value}`;
   els.targetOut.textContent = `E${els.target.value}`;
+  [els.level, els.e85Eth, els.target].forEach(syncSliderFill);
 
   if (tank <= 0) {
     els.addE85.innerHTML = fmtGal(0);
@@ -252,6 +281,8 @@ function recalc() {
     els.statusMsg.textContent = "Enter your tank size to run the numbers.";
     setGauge(0);
     setMixBar(0, 0, 0, 1);
+    setQuickbar(null);
+    saveState();
     return;
   }
 
@@ -268,12 +299,73 @@ function recalc() {
 
   setGauge(r.finalEth);
   setMixBar(r.e85Gal / tank, r.gasGal / tank, currentGal / tank, 0);
+  setQuickbar(r);
+  saveState();
 }
 
 function setMixBar(e85, gas, existing, empty) {
   els.mixE85.style.width = `${e85 * 100}%`;
   els.mixGas.style.width = `${gas * 100}%`;
   els.mixExisting.style.width = `${existing * 100}%`;
+}
+
+/* ── Mobile quick-bar (mirrors the result while it's scrolled off) ────── */
+let quickbarHasResult = false;
+let resultsInView = true;
+
+function setQuickbar(r) {
+  quickbarHasResult = !!r;
+  if (r) {
+    els.qbBlend.textContent = `E${Math.round(r.finalEth * 100)}`;
+    els.qbE85.textContent = r.e85Gal.toFixed(1);
+    els.qbGas.textContent = r.gasGal.toFixed(1);
+  }
+  updateQuickbarVisibility();
+}
+
+function updateQuickbarVisibility() {
+  els.quickbar.classList.toggle("is-visible", quickbarHasResult && !resultsInView);
+}
+
+function initQuickbar() {
+  if (typeof IntersectionObserver === "undefined") return;
+  document.body.classList.add("has-quickbar");
+
+  const results = document.querySelector(".panel-results");
+  new IntersectionObserver(
+    ([entry]) => {
+      resultsInView = entry.isIntersecting;
+      updateQuickbarVisibility();
+    },
+    { threshold: 0.25 }
+  ).observe(results);
+
+  els.quickbar.addEventListener("click", () => {
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    results.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  });
+}
+
+/* ── Remember settings between fill-ups ───────────────────────────────── */
+const STORE_KEY = "e85calc:v1";
+const PERSIST_KEYS = ["tank", "level", "currentEth", "fillMode", "addGal", "pumpType", "pumpEth", "e85Eth", "target"];
+
+function saveState() {
+  try {
+    const state = {};
+    PERSIST_KEYS.forEach((k) => (state[k] = els[k].value));
+    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+  } catch { /* private mode / storage denied — live without memory */ }
+}
+
+function restoreState() {
+  try {
+    const state = JSON.parse(localStorage.getItem(STORE_KEY));
+    if (!state) return;
+    PERSIST_KEYS.forEach((k) => {
+      if (state[k] != null) els[k].value = state[k];
+    });
+  } catch { /* corrupt or unavailable — defaults are fine */ }
 }
 
 /* ── Tube-tester helper ───────────────────────────────────────────────── */
@@ -314,10 +406,18 @@ function initTester() {
 }
 
 /* ── Wiring ───────────────────────────────────────────────────────────── */
+function applyPumpType() {
+  const map = { e0: 0, e10: 10, e15: 15 };
+  if (els.pumpType.value in map) els.pumpEth.value = map[els.pumpType.value];
+  els.pumpEth.disabled = els.pumpType.value !== "custom";
+}
+
 function init() {
   for (const [key, id] of Object.entries(EL_IDS)) els[key] = $(id);
 
   populateYears();
+  restoreState();
+  applyPumpType();
 
   els.year.addEventListener("change", () => { refreshMakes(); });
   els.make.addEventListener("change", () => { refreshModels(); });
@@ -325,9 +425,7 @@ function init() {
 
   // Pump-gas preset → ethanol %
   els.pumpType.addEventListener("change", () => {
-    const map = { e0: 0, e10: 10, e15: 15 };
-    if (els.pumpType.value in map) els.pumpEth.value = map[els.pumpType.value];
-    els.pumpEth.disabled = els.pumpType.value !== "custom";
+    applyPumpType();
     recalc();
   });
 
@@ -337,7 +435,13 @@ function init() {
   });
 
   initTester();
+  initQuickbar();
   recalc();
+
+  // Offline support (no-op where service workers are unavailable).
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
 }
 
 // Export for tests (Node) without breaking the browser.
