@@ -5,6 +5,7 @@
    ═══════════════════════════════════════════════════════════════════════ */
 
 :root {
+  color-scheme: dark;        /* native controls (spinners, dropdowns) in dark */
   --magenta: #ff5585;        /* warm coral-magenta neon */
   --magenta-hot: #ff9bb0;
   --sunset: #ff8a4d;         /* sunset orange */
@@ -23,6 +24,9 @@
 }
 
 * { box-sizing: border-box; }
+
+/* `hidden` must always win, even over display:flex/grid rules below */
+[hidden] { display: none !important; }
 
 html, body { margin: 0; padding: 0; }
 
@@ -276,30 +280,49 @@ input[type="number"]:focus, select:focus {
 
 input:disabled, select:disabled { opacity: .45; }
 
-/* sliders */
+/* sliders — slim visible track, but a 44px-tall touch/click target */
 input[type="range"] {
+  --fill: 0%;
+  --track: linear-gradient(90deg, var(--teal-deep) var(--fill), #232842 var(--fill));
   width: 100%;
   appearance: none;
   -webkit-appearance: none;
-  height: 8px;
-  border-radius: 6px;
-  background: #232842;
+  height: 44px;
+  margin: -10px 0;
+  background: transparent;
   outline: none;
-  border: 1px solid var(--line);
+  cursor: pointer;
+  touch-action: manipulation;
 }
 
 input[type="range"]:focus-visible {
+  border-radius: 8px;
   box-shadow: 0 0 0 3px #ff55852e;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--track);
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 22px; height: 22px;
+  margin-top: -8px;               /* center the thumb on the 8px track */
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%, #fff, #d9dcef 45%, #8f93ad);
   border: 3px solid var(--magenta);
   cursor: pointer;
   box-shadow: 0 0 14px #ff558588;
+}
+
+input[type="range"]::-moz-range-track {
+  height: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--track);
 }
 
 input[type="range"]::-moz-range-thumb {
@@ -311,7 +334,10 @@ input[type="range"]::-moz-range-thumb {
   box-shadow: 0 0 14px #ff558588;
 }
 
-.target-slider { background: linear-gradient(90deg, #1d4a48, #7a4327, #8f2f4a); }
+/* target slider keeps its blend-spectrum gradient instead of a fill */
+.target-slider {
+  --track: linear-gradient(90deg, #1d4a48, #7a4327, #8f2f4a);
+}
 
 /* ── Tube-tester helper ─────────────────────────────────────────────── */
 .tester {
@@ -333,8 +359,17 @@ input[type="range"]::-moz-range-thumb {
   color: var(--sunset);
   list-style: none;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
+  transition: color .2s;
+}
+
+.tester summary:hover { color: var(--amber); }
+
+.tester summary:focus-visible {
+  outline: none;
+  border-radius: 8px;
+  box-shadow: 0 0 0 3px #ff8a4d2e;
 }
 
 .tester summary::-webkit-details-marker { display: none; }
@@ -404,6 +439,14 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .gauge-ticks line { stroke: #3b4160; stroke-width: 2.5; }
+
+.gauge-tick-labels text {
+  font-family: var(--font-ui);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  fill: var(--text-dim);
+}
 
 .gauge-needle {
   stroke: #f2f4fc;
@@ -700,9 +743,94 @@ input[type="range"]::-moz-range-thumb {
   font-size: .82rem;
 }
 
-.checker { display: none; }
+/* ── Inline SVG icons ───────────────────────────────────────────────── */
+.ico {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  vertical-align: -0.12em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ico-solid { fill: currentColor; stroke: none; }
+
+.badge .ico, .compat-verdict .ico { margin-right: 4px; }
+
+/* ── No-JS fallback ─────────────────────────────────────────────────── */
+.noscript-banner {
+  max-width: 1060px;
+  margin: 20px auto 0;
+  padding: 14px 18px;
+  border: 1px solid #ffc14d66;
+  border-radius: 12px;
+  background: #322408;
+  color: #ffdf9e;
+  font-weight: 500;
+}
+
+/* ── Mobile quick-bar (results at a glance while you scroll) ────────── */
+.quickbar {
+  position: fixed;
+  left: 12px; right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: 10;
+  display: none;
+  width: auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  font: inherit;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #10131fee;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 12px 40px #000000c0, 0 0 18px #3ee6e022, inset 0 1px 0 #ffffff0d;
+  color: var(--text);
+  cursor: pointer;
+  transform: translateY(140%);
+  transition: transform .3s cubic-bezier(.2,.8,.3,1);
+}
+
+.quickbar.is-visible { transform: translateY(0); }
+
+.quickbar:focus-visible {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px #3ee6e02e, 0 12px 40px #000000c0;
+}
+
+.quickbar-blend {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--teal);
+  text-shadow: 0 0 12px #3ee6e055;
+}
+
+.quickbar-adds {
+  display: flex;
+  gap: 14px;
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+.quickbar-adds .qb-e85 { color: var(--magenta-hot); }
+.quickbar-adds .qb-gas { color: var(--teal); }
+
+.quickbar-arrow { color: var(--text-dim); font-size: .9rem; }
+
+@media (max-width: 880px) {
+  .quickbar { display: flex; }
+  body.has-quickbar .site-footer { padding-bottom: 96px; }
+}
 
 /* ── Motion preferences ─────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .gauge-fill, .gauge-needle, .mix-seg { transition: none; }
+  .gauge-fill, .gauge-needle, .mix-seg, .quickbar { transition: none; }
 }

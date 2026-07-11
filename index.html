@@ -5,13 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>E85 Blend Lab — Ethanol Mix Calculator</title>
 <meta name="description" content="Retro California neon E85 blend calculator: dial in your target ethanol mix from your tank size, fuel level, and pump fuel.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0c13">
+<meta property="og:type" content="website">
+<meta property="og:title" content="E85 Blend Lab — Ethanol Mix Calculator">
+<meta property="og:description" content="Dial in your target ethanol blend: tank size, fuel level, pump gas, seasonal E85 — it tells you exactly what to pump.">
+<meta property="og:url" content="https://protechguy.github.io/e85calc/">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🚘</text></svg>">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
+
+<noscript>
+  <p class="noscript-banner">This calculator needs JavaScript to run the blend math — enable it and reload.</p>
+</noscript>
 
 <header class="site-header">
   <div class="header-inner">
@@ -101,7 +113,10 @@
     </div>
 
     <details class="tester">
-      <summary>🧪 TEST YOUR FUEL <span class="optional">tube-tester helper</span></summary>
+      <summary>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6.2L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.2V3"/><path d="M7.5 15h9"/></svg>
+        TEST YOUR FUEL <span class="optional">tube-tester helper</span>
+      </summary>
       <p class="hint-block">
         Fill the tube with water to a line, top up with fuel, cap and shake, then
         let it settle. Ethanol bonds to the water and raises the separation line —
@@ -151,6 +166,11 @@
           <line x1="164.95" y1="132.5" x2="156.3" y2="127.5"/>
           <line x1="35" y1="57.5" x2="43.7" y2="62.5"/>
           <line x1="165" y1="57.5" x2="156.3" y2="62.5"/>
+        </g>
+        <g class="gauge-tick-labels" aria-hidden="true">
+          <text x="38" y="147" text-anchor="middle">0</text>
+          <text x="100" y="13" text-anchor="middle">50</text>
+          <text x="162" y="147" text-anchor="middle">100</text>
         </g>
         <line id="gauge-needle" class="gauge-needle" x1="100" y1="95" x2="100" y2="34"/>
         <circle class="gauge-hub" cx="100" cy="95" r="7"/>
@@ -220,6 +240,15 @@
   </section>
 
 </main>
+
+<button type="button" id="quickbar" class="quickbar" aria-label="Jump to results">
+  <span id="qb-blend" class="quickbar-blend">E30</span>
+  <span class="quickbar-adds">
+    <span class="qb-e85">E85 <span id="qb-e85">0.0</span> gal</span>
+    <span class="qb-gas">GAS <span id="qb-gas">0.0</span> gal</span>
+  </span>
+  <span class="quickbar-arrow" aria-hidden="true">▼</span>
+</button>
 
 <footer class="site-footer">
   <p>E85 BLEND LAB — tuned for the street. Not fueling advice; verify capacities &amp; compatibility in your owner's manual.</p>

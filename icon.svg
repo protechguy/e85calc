@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- E85 Blend Lab — neon license-plate mark -->
+  <rect width="512" height="512" rx="96" fill="#0a0c13"/>
+  <rect x="64" y="150" width="384" height="212" rx="40" fill="#2b1018" stroke="#ff5585" stroke-width="14"/>
+  <rect x="64" y="150" width="384" height="212" rx="40" fill="none" stroke="#ff5585" stroke-width="30" opacity=".22"/>
+  <text x="256" y="298" text-anchor="middle" font-family="Righteous, Arial Black, sans-serif" font-size="128" letter-spacing="8" fill="#ff9bb0">E85</text>
+  <path d="M96 416h320" stroke="#3ee6e0" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+  <path d="M96 416h320" stroke="#3ee6e0" stroke-width="26" stroke-linecap="round" opacity=".22"/>
+</svg>
