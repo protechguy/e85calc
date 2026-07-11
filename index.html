@@ -56,6 +56,19 @@
       <div id="veh-note" class="veh-note" role="status"></div>
     </fieldset>
 
+    <!-- Web Bluetooth OBD-II readout — only revealed where the API exists -->
+    <div id="obd-reader" class="obd-reader" hidden>
+      <div class="obd-row">
+        <button type="button" id="obd-btn" class="btn-neon">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10-5 5V2l5 5L7 17"/></svg>
+          READ FROM CAR
+        </button>
+        <span class="optional">fills tank mix &amp; fuel level from the ECU</span>
+      </div>
+      <p id="obd-status" class="obd-status" role="status"></p>
+      <p class="hint-block">Needs a Bluetooth&nbsp;LE OBD-II adapter (Veepeak BLE, vLinker MC+…) and ignition on. Ethanol readout is a flex-fuel thing.</p>
+    </div>
+
     <div class="field">
       <label for="tank-size">TANK SIZE <span class="hint">US gallons</span></label>
       <input type="number" id="tank-size" min="1" max="60" step="0.1" value="16" inputmode="decimal">
@@ -257,5 +270,6 @@
 <script src="vehicles.js"></script>
 <script src="app.js"></script>
 <script src="compat.js"></script>
+<script src="obd.js"></script>
 </body>
 </html>

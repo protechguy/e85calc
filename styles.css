@@ -222,6 +222,30 @@ body::after {
 .badge-mod  { background: #3a2c10; border: 1px solid #ffc14d55; color: var(--amber); }
 .badge-sub  { flex-basis: 100%; font-size: .8rem; color: var(--text-dim); line-height: 1.4; }
 
+/* ── OBD-II reader ──────────────────────────────────────────────────── */
+.obd-reader {
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  padding: 14px 16px 12px;
+  margin: 0 0 22px;
+  background: #ffffff05;
+}
+
+.obd-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.obd-status { margin: 10px 0 0; font-size: .88rem; font-weight: 500; line-height: 1.45; }
+.obd-status:empty { display: none; }
+.obd-status.busy { color: var(--teal); }
+.obd-status.ok   { color: #a9efc7; }
+.obd-status.warn { color: var(--amber); }
+
+.obd-reader .hint-block { margin-top: 10px; }
+
 /* ── Fields ─────────────────────────────────────────────────────────── */
 .field { margin-bottom: 20px; }
 
@@ -759,6 +783,7 @@ input[type="range"]::-moz-range-thumb {
 .ico-solid { fill: currentColor; stroke: none; }
 
 .badge .ico, .compat-verdict .ico { margin-right: 4px; }
+.btn-neon .ico { margin-right: 5px; }
 
 /* ── No-JS fallback ─────────────────────────────────────────────────── */
 .noscript-banner {
