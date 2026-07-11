@@ -28,6 +28,36 @@ function summarizeVariants(variants) {
    when a menu has a single item. */
 const asArray = (x) => (Array.isArray(x) ? x : x == null ? [] : [x]);
 
+/**
+ * Match an EPA model name (e.g. "F150 Pickup 2WD FFV") against the curated
+ * tank-size dataset (e.g. "F-150"). Names are normalized to alphanumerics
+ * and matched by containment either way; the longest overlap wins, and
+ * anything shorter than 3 characters is rejected as too ambiguous.
+ * `vehicles` is the curated dataset (VEHICLES in the browser).
+ */
+function findTankMatch(vehicles, year, make, modelName) {
+  const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const y = +year;
+  const target = norm(modelName);
+  if (!target) return null;
+
+  let best = null;
+  let bestScore = 0;
+  for (const v of vehicles) {
+    if (norm(v.make) !== norm(make) || y < v.years[0] || y > v.years[1]) continue;
+    const key = norm(v.model.replace(/\(.*?\)/g, ""));
+    if (!key) continue;
+    const score = target.includes(key) ? key.length
+      : key.includes(target) ? target.length
+      : 0;
+    if (score > bestScore) {
+      bestScore = score;
+      best = v;
+    }
+  }
+  return bestScore >= 3 ? best : null;
+}
+
 async function epaJson(path) {
   const res = await fetch(`${EPA_BASE}${path}`, {
     headers: { Accept: "application/json" },
@@ -44,7 +74,7 @@ async function epaMenu(path) {
 /* ── UI ───────────────────────────────────────────────────────────────── */
 (function () {
   if (typeof module !== "undefined") {
-    module.exports = { isFlexFuelRecord, summarizeVariants };
+    module.exports = { isFlexFuelRecord, summarizeVariants, findTankMatch };
     return;
   }
 
@@ -80,6 +110,8 @@ async function epaMenu(path) {
     el.variants.hidden = true;
     el.variants.innerHTML = "";
     el.mods.hidden = true;
+    el.tank.hidden = true;
+    el.tank.innerHTML = "";
   }
 
   function resetSelect(sel, placeholder) {
@@ -242,10 +274,29 @@ async function epaMenu(path) {
       el.mods.innerHTML = MODS_HTML;
       el.mods.hidden = false;
     }
+
+    renderTankOffer();
+  }
+
+  /* Offer to drop the matched tank size into the calculator's Setup panel. */
+  function renderTankOffer() {
+    const match = findTankMatch(VEHICLES, el.year.value, el.make.value, el.model.value);
+    if (!match) return;
+    el.tank.innerHTML =
+      `<span>Tank ≈ <strong>${match.tank.toFixed(1)} gal</strong> on this platform
+        (approximate — varies by trim).</span>
+       <button type="button" id="compat-tank-btn" class="btn-neon">USE IN CALCULATOR</button>`;
+    el.tank.hidden = false;
+    document.getElementById("compat-tank-btn").addEventListener("click", () => {
+      const tankInput = document.getElementById("tank-size");
+      tankInput.value = match.tank;
+      tankInput.dispatchEvent(new Event("input", { bubbles: true }));
+      document.querySelector(".panel-inputs").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }
 
   function initCompat() {
-    ["year", "make", "model", "status", "verdict", "variants", "mods"].forEach(
+    ["year", "make", "model", "status", "verdict", "variants", "mods", "tank"].forEach(
       (k) => (el[k] = document.getElementById(`compat-${k}`))
     );
     el.year.addEventListener("change", loadMakes);

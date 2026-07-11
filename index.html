@@ -61,6 +61,20 @@
 
     <div class="field-row">
       <div class="field">
+        <label for="fill-mode">FILL MODE</label>
+        <select id="fill-mode">
+          <option value="full" selected>Fill the tank</option>
+          <option value="partial">Partial fill…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="add-gal">GALLONS TO ADD</label>
+        <input type="number" id="add-gal" min="0" step="0.1" value="12" disabled inputmode="decimal">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
         <label for="pump-type">PUMP GAS TYPE</label>
         <select id="pump-type">
           <option value="e10" selected>E10 (most pump gas)</option>
@@ -143,8 +157,9 @@
     <p id="status-msg" class="status ok" role="status"></p>
 
     <p class="fine-print">
-      Full tank blend: <strong id="final-blend">E30</strong>. Estimates only — always verify your
-      fuel system, tune, and ethanol content before running high blends.
+      Blend after fill: <strong id="final-blend">E30</strong> across
+      <strong id="final-total">16.0 gal</strong> in the tank. Estimates only — always verify
+      your fuel system, tune, and ethanol content before running high blends.
     </p>
   </section>
 
@@ -170,6 +185,7 @@
 
     <p id="compat-status" class="compat-status" role="status" hidden></p>
     <div id="compat-verdict" class="compat-verdict" hidden></div>
+    <div id="compat-tank" class="compat-tank" hidden></div>
     <ul id="compat-variants" class="compat-variants" hidden></ul>
     <div id="compat-mods" class="compat-mods" hidden></div>
   </section>

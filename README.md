@@ -75,8 +75,8 @@ curated dataset and says so.
 
 ## Roadmap
 
-- Ethanol content tester integration / partial-fill mode
-- Pull tank size from the compatibility lookup's vehicle selection
+- Ethanol content tester integration
+- Liters/metric mode
 
 ---
 
