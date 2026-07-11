@@ -53,6 +53,25 @@ function calcBlend({ tank, currentGal, currentEth, pumpEth, e85Eth, targetEth, a
   return { e85Gal: x, gasGal: y, finalEth, status, totalGal: total };
 }
 
+/**
+ * Tube-tester math.
+ *
+ * A graduated tester is filled with water to `waterMl`, topped up with fuel
+ * to `totalMl`, and shaken. Ethanol bonds to the water, so the separation
+ * line rises to `sepMl`. The ethanol absorbed is (sepMl − waterMl) out of
+ * (totalMl − waterMl) of fuel.
+ *
+ * Returns the ethanol percentage (0–100), or null when the readings can't
+ * form a valid test. Ignores the small water/ethanol volume-contraction
+ * effect, like the printed scales on most testers.
+ */
+function calcTubeTest({ waterMl, totalMl, sepMl }) {
+  const fuel = totalMl - waterMl;
+  if (!(waterMl >= 0) || !(fuel > 0) || !(sepMl >= 0)) return null;
+  const absorbed = Math.min(Math.max(sepMl - waterMl, 0), fuel);
+  return (absorbed / fuel) * 100;
+}
+
 /* ── DOM helpers ───────────────────────────────────────────────────────── */
 const $ = (id) => document.getElementById(id);
 
@@ -84,6 +103,12 @@ const EL_IDS = {
   mixE85: "mix-e85",
   mixGas: "mix-gas",
   mixExisting: "mix-existing",
+  testWater: "test-water",
+  testTotal: "test-total",
+  testSep: "test-sep",
+  testResult: "test-result",
+  testUseE85: "test-use-e85",
+  testUseTank: "test-use-tank",
 };
 
 const els = {}; // bound to DOM nodes in init()
@@ -251,6 +276,43 @@ function setMixBar(e85, gas, existing, empty) {
   els.mixExisting.style.width = `${existing * 100}%`;
 }
 
+/* ── Tube-tester helper ───────────────────────────────────────────────── */
+function recalcTest() {
+  const pct = calcTubeTest({
+    waterMl: parseFloat(els.testWater.value),
+    totalMl: parseFloat(els.testTotal.value),
+    sepMl: parseFloat(els.testSep.value),
+  });
+  const valid = pct != null;
+  els.testResult.textContent = valid ? `E${Math.round(pct)}` : "—";
+  els.testUseE85.disabled = !valid;
+  els.testUseTank.disabled = !valid;
+  return pct;
+}
+
+function initTester() {
+  [els.testWater, els.testTotal, els.testSep].forEach((el) =>
+    el.addEventListener("input", recalcTest)
+  );
+
+  els.testUseE85.addEventListener("click", () => {
+    const pct = recalcTest();
+    if (pct == null) return;
+    // Clamp to the slider's range (E51–E98).
+    els.e85Eth.value = Math.min(Math.max(Math.round(pct), +els.e85Eth.min), +els.e85Eth.max);
+    recalc();
+  });
+
+  els.testUseTank.addEventListener("click", () => {
+    const pct = recalcTest();
+    if (pct == null) return;
+    els.currentEth.value = Math.round(pct);
+    recalc();
+  });
+
+  recalcTest();
+}
+
 /* ── Wiring ───────────────────────────────────────────────────────────── */
 function init() {
   for (const [key, id] of Object.entries(EL_IDS)) els[key] = $(id);
@@ -274,12 +336,13 @@ function init() {
       .forEach((el) => el.addEventListener(evt, recalc));
   });
 
+  initTester();
   recalc();
 }
 
 // Export for tests (Node) without breaking the browser.
 if (typeof module !== "undefined") {
-  module.exports = { calcBlend };
+  module.exports = { calcBlend, calcTubeTest };
 } else {
   document.addEventListener("DOMContentLoaded", init);
 }

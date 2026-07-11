@@ -99,6 +99,35 @@
       <label for="target-eth">TARGET BLEND <output id="target-eth-out" for="target-eth">E30</output></label>
       <input type="range" id="target-eth" min="10" max="98" step="1" value="30" class="target-slider">
     </div>
+
+    <details class="tester">
+      <summary>🧪 TEST YOUR FUEL <span class="optional">tube-tester helper</span></summary>
+      <p class="hint-block">
+        Fill the tube with water to a line, top up with fuel, cap and shake, then
+        let it settle. Ethanol bonds to the water and raises the separation line —
+        enter the three readings and skip the printed scale.
+      </p>
+      <div class="tester-row">
+        <div class="field">
+          <label for="test-water">WATER LINE <span class="hint">ml</span></label>
+          <input type="number" id="test-water" min="0" step="0.1" value="2" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label for="test-total">FUEL FILLED TO <span class="hint">ml</span></label>
+          <input type="number" id="test-total" min="0" step="0.1" value="10" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label for="test-sep">LINE AFTER SHAKE <span class="hint">ml</span></label>
+          <input type="number" id="test-sep" min="0" step="0.1" inputmode="decimal">
+        </div>
+      </div>
+      <div class="tester-result">
+        <span id="test-result" class="tester-pct">—</span>
+        <button type="button" id="test-use-e85" class="btn-neon" disabled>USE FOR E85 PUMP</button>
+        <button type="button" id="test-use-tank" class="btn-neon" disabled>USE FOR TANK MIX</button>
+      </div>
+      <p class="hint-block">Approximate — ignores the small volume shrink when water and ethanol mix, same as most testers' printed scales.</p>
+    </details>
   </section>
 
   <!-- ══════════ RESULTS ══════════ -->
