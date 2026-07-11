@@ -2,7 +2,7 @@
    stale-while-revalidate so the calculator works offline at the pump.
    EPA API calls are cross-origin and intentionally left network-only. */
 
-const CACHE = "e85calc-v2";
+const CACHE = "e85calc-v3";
 const SHELL = [
   "./",
   "./index.html",

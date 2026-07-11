@@ -73,6 +73,35 @@ body::after {
 
 .logo { display: flex; align-items: center; gap: 18px; }
 
+/* neon corn cob mark — amber kernels, teal husk, tube-sign glow */
+.logo-cob {
+  width: clamp(44px, 6vw, 58px);
+  height: auto;
+  flex-shrink: 0;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.logo-cob .cob-body path {
+  stroke: var(--amber);
+  stroke-width: 3;
+  fill: #ffc14d0d;
+  filter: drop-shadow(0 0 5px #ffc14d99) drop-shadow(0 0 14px #ffc14d40);
+}
+
+.logo-cob .cob-kernels path {
+  stroke: var(--amber);
+  stroke-width: 1.6;
+  opacity: .75;
+}
+
+.logo-cob .cob-husk path {
+  stroke: var(--teal);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 5px #3ee6e099) drop-shadow(0 0 14px #3ee6e040);
+}
+
 /* license-plate logo mark */
 .plate {
   font-family: var(--font-display);
