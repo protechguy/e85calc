@@ -1,6 +1,6 @@
 /* Blend-math unit tests. Run with: node test/calc.test.js */
 const assert = require("node:assert");
-const { calcBlend } = require("../app.js");
+const { calcBlend, calcTubeTest } = require("../app.js");
 
 const close = (a, b, eps = 1e-9) =>
   assert.ok(Math.abs(a - b) < eps, `expected ${a} ≈ ${b}`);
@@ -109,5 +109,26 @@ const close = (a, b, eps = 1e-9) =>
   close(full.e85Gal, explicit.e85Gal);
   close(full.totalGal, 16);
 }
+
+/* ── Tube-tester math ── */
+
+// 2ml water + 8ml fuel, line rises to 6.4ml → 4.4ml absorbed of 8ml = 55%.
+close(calcTubeTest({ waterMl: 2, totalMl: 10, sepMl: 6.4 }), 55);
+
+// Pure gasoline: line doesn't move.
+close(calcTubeTest({ waterMl: 2, totalMl: 10, sepMl: 2 }), 0);
+
+// E85-ish: 2ml water + 8ml fuel, line at 8.8ml → 6.8/8 = 85%.
+close(calcTubeTest({ waterMl: 2, totalMl: 10, sepMl: 8.8 }), 85);
+
+// Readings clamp: line below water floor → 0%, above the fuel top → 100%.
+close(calcTubeTest({ waterMl: 2, totalMl: 10, sepMl: 1 }), 0);
+close(calcTubeTest({ waterMl: 2, totalMl: 10, sepMl: 12 }), 100);
+
+// Invalid tests return null: no fuel volume, negative or missing readings.
+assert.equal(calcTubeTest({ waterMl: 10, totalMl: 10, sepMl: 10 }), null);
+assert.equal(calcTubeTest({ waterMl: 12, totalMl: 10, sepMl: 12 }), null);
+assert.equal(calcTubeTest({ waterMl: -1, totalMl: 10, sepMl: 5 }), null);
+assert.equal(calcTubeTest({ waterMl: 2, totalMl: 10, sepMl: NaN }), null);
 
 console.log("✓ all blend-math tests passed");

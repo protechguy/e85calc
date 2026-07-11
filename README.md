@@ -75,7 +75,7 @@ curated dataset and says so.
 
 ## Roadmap
 
-- Ethanol content tester integration
+- OBD-II ethanol readout via Web Bluetooth (flex-fuel vehicles, PID 0x52)
 - Liters/metric mode
 
 ---
