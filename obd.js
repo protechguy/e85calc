@@ -1,15 +1,20 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   READ FROM CAR — OBD-II ethanol & fuel-level readout over Web Bluetooth
+   READ FROM CAR — OBD-II ethanol & fuel-level readout from the browser
 
-   Talks to an ELM327-compatible Bluetooth LE adapter (Veepeak BLE,
-   vLinker MC+, OBDLink CX, HM-10 clones…) and reads two standard PIDs:
+   Two transports, one ELM327 conversation:
+
+     • Web Bluetooth — Bluetooth LE adapters (Veepeak BLE, vLinker MC+,
+       OBDLink CX…). Android + desktop Chrome/Edge.
+     • Web Serial — Bluetooth *Classic* adapters (OBDLink MX+, most cheap
+       ELM327s) via the COM port Windows/macOS creates when you pair them,
+       plus USB cables. Desktop Chrome/Edge only.
+
+   Reads two standard Mode-01 PIDs and fills the calculator:
 
      0x52  Ethanol fuel %      (A × 100 / 255) — flex-fuel vehicles
      0x2F  Fuel tank level %   (A × 100 / 255)
 
-   Values drop straight into the calculator's "ethanol % in tank" and
-   "fuel currently in tank" inputs. Chrome/Edge on Android & desktop only
-   (iOS has no Web Bluetooth); the button never renders elsewhere.
+   iOS has neither API, so the whole block never renders there.
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ── Response parsing (pure — unit-tested in Node) ────────────────────── */
@@ -49,7 +54,57 @@ function decodePct(byte) {
     return;
   }
 
-  if (!("bluetooth" in navigator)) return; // block stays hidden
+  const hasBle = "bluetooth" in navigator;
+  const hasSerial = "serial" in navigator;
+  if (!hasBle && !hasSerial) return; // block stays hidden
+
+  const $ = (id) => document.getElementById(id);
+  const enc = new TextEncoder();
+  const dec = new TextDecoder();
+  let busy = false;
+  let bleDevice = null; // remembered across reads this session
+
+  function setStatus(msg, cls) {
+    const el = $("obd-status");
+    el.className = `obd-status ${cls || ""}`;
+    el.textContent = msg;
+  }
+
+  /* ── Shared command/response engine: send, accumulate until ">" ────── */
+  function makeTurnEngine(writeBytes) {
+    let buffer = "";
+    let resolveTurn = null;
+
+    function feed(text) {
+      buffer += text;
+      if (buffer.includes(">") && resolveTurn) {
+        const out = buffer;
+        buffer = "";
+        const r = resolveTurn;
+        resolveTurn = null;
+        r(out);
+      }
+    }
+
+    async function send(cmd, timeoutMs = 6000) {
+      buffer = "";
+      const turn = new Promise((resolve, reject) => {
+        resolveTurn = resolve;
+        setTimeout(() => {
+          if (resolveTurn) {
+            resolveTurn = null;
+            reject(new Error("timeout"));
+          }
+        }, timeoutMs);
+      });
+      await writeBytes(enc.encode(`${cmd}\r`));
+      return turn;
+    }
+
+    return { feed, send };
+  }
+
+  /* ── Transport: Bluetooth LE ───────────────────────────────────────── */
 
   /* GATT UART candidates, most common OBD BLE adapters first:
      FFF0/FFF1/FFF2 (Veepeak, vLinker), FFE0/FFE1 (HM-10 clones),
@@ -64,102 +119,95 @@ function decodePct(byte) {
     },
   ];
 
-  let device = null;   // remembered across reads this session
-  let busy = false;
+  async function connectBle() {
+    if (!bleDevice || !bleDevice.gatt) {
+      bleDevice = await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: UART_CANDIDATES.map((c) => c.service),
+      });
+    }
+    const server = await bleDevice.gatt.connect();
 
-  const $ = (id) => document.getElementById(id);
-  const enc = new TextEncoder();
-  const dec = new TextDecoder();
-
-  function setStatus(msg, cls) {
-    const el = $("obd-status");
-    el.className = `obd-status ${cls || ""}`;
-    el.textContent = msg;
-  }
-
-  async function findUart(server) {
+    let uart = null;
     for (const c of UART_CANDIDATES) {
       try {
         const svc = await server.getPrimaryService(c.service);
         const write = await svc.getCharacteristic(c.write);
         const notify = await svc.getCharacteristic(c.notify);
-        return { write, notify };
+        uart = { write, notify };
+        break;
       } catch { /* try the next known layout */ }
     }
-    throw new Error("unsupported-adapter");
-  }
+    if (!uart) throw new Error("unsupported-adapter");
 
-  /**
-   * Send one command and collect notification chunks until the ELM327
-   * prompt (">") arrives or the timeout hits.
-   */
-  function makeChannel(uart) {
-    let buffer = "";
-    let resolveTurn = null;
-
-    uart.notify.addEventListener("characteristicvaluechanged", (e) => {
-      buffer += dec.decode(e.target.value);
-      if (buffer.includes(">") && resolveTurn) {
-        const out = buffer;
-        buffer = "";
-        const r = resolveTurn;
-        resolveTurn = null;
-        r(out);
-      }
-    });
-
-    return async function send(cmd, timeoutMs = 6000) {
-      buffer = "";
-      const turn = new Promise((resolve, reject) => {
-        resolveTurn = resolve;
-        setTimeout(() => {
-          if (resolveTurn) {
-            resolveTurn = null;
-            reject(new Error("timeout"));
-          }
-        }, timeoutMs);
-      });
-      const bytes = enc.encode(`${cmd}\r`);
+    const engine = makeTurnEngine(async (bytes) => {
       if (uart.write.properties.writeWithoutResponse) {
         await uart.write.writeValueWithoutResponse(bytes);
       } else {
         await uart.write.writeValue(bytes);
       }
-      return turn;
+    });
+    uart.notify.addEventListener("characteristicvaluechanged", (e) =>
+      engine.feed(dec.decode(e.target.value))
+    );
+    await uart.notify.startNotifications();
+
+    return { send: engine.send, close: () => bleDevice.gatt.disconnect() };
+  }
+
+  /* ── Transport: serial COM port (classic-BT pairings & USB cables) ─── */
+  async function connectSerial() {
+    const port = await navigator.serial.requestPort();
+    await port.open({ baudRate: 115200 }); // RFCOMM ignores baud; USB ELMs use it
+    const writer = port.writable.getWriter();
+    const reader = port.readable.getReader();
+    const engine = makeTurnEngine((bytes) => writer.write(bytes));
+
+    let alive = true;
+    (async () => {
+      try {
+        while (alive) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          if (value) engine.feed(dec.decode(value));
+        }
+      } catch { /* pump ends when the port closes */ }
+    })();
+
+    return {
+      send: engine.send,
+      close: async () => {
+        alive = false;
+        try { await reader.cancel(); } catch { /* already closed */ }
+        try { reader.releaseLock(); } catch { /* already released */ }
+        try { writer.releaseLock(); } catch { /* already released */ }
+        try { await port.close(); } catch { /* already closed */ }
+      },
     };
   }
 
-  async function connect() {
-    if (!device || !device.gatt) {
-      device = await navigator.bluetooth.requestDevice({
-        acceptAllDevices: true,
-        optionalServices: UART_CANDIDATES.map((c) => c.service),
-      });
-      device.addEventListener("gattserverdisconnected", () => setStatus("", ""));
-    }
-    const server = await device.gatt.connect();
-    const uart = await findUart(server);
-    const send = makeChannel(uart);
-    await uart.notify.startNotifications();
-    return { send, disconnect: () => device.gatt.disconnect() };
-  }
-
+  /* ── The shared session: init adapter, read PIDs, fill the form ────── */
   function applyReading(id, pct) {
     const input = $(id);
     input.value = Math.round(pct);
     input.dispatchEvent(new Event("input", { bubbles: true }));
   }
 
-  async function readCar() {
+  async function readCar(transport) {
     if (busy) return;
     busy = true;
-    const btn = $("obd-btn");
-    btn.disabled = true;
+    const buttons = [$("obd-btn"), $("obd-serial-btn")].filter(Boolean);
+    buttons.forEach((b) => (b.disabled = true));
     let link = null;
 
     try {
-      setStatus("Choose your OBD adapter…", "busy");
-      link = await connect();
+      setStatus(
+        transport === "serial"
+          ? "Pick the adapter's COM port… (MX+ pairings show two — outgoing is usually the lower number)"
+          : "Choose your OBD adapter…",
+        "busy"
+      );
+      link = transport === "serial" ? await connectSerial() : await connectBle();
 
       setStatus("Waking the adapter…", "busy");
       await link.send("ATZ", 10000);
@@ -183,26 +231,46 @@ function decodePct(byte) {
         setStatus(`Pulled ${got.join(" + ")} from the ECU. If you just filled up, drive a few miles and re-read — the ECU learns the new blend gradually.`, "ok");
       }
     } catch (err) {
-      device = null; // force a fresh chooser next time
+      if (transport !== "serial") bleDevice = null; // fresh chooser next time
       if (err && err.name === "NotFoundError") {
         setStatus("", ""); // user closed the chooser — not an error
       } else if (err && err.message === "unsupported-adapter") {
-        setStatus("That device doesn't look like an ELM327 BLE adapter. Classic-Bluetooth dongles won't work — it needs Bluetooth LE (e.g. Veepeak BLE, vLinker MC+).", "warn");
+        setStatus("That device doesn't answer like a BLE ELM327. Classic-Bluetooth adapters (OBDLink MX+…) don't do BLE — pair it in your OS's Bluetooth settings, then use PAIRED / SERIAL ADAPTER below.", "warn");
       } else if (err && err.message === "timeout") {
-        setStatus("The adapter stopped responding — check it's seated in the OBD port and the ignition is on, then try again.", "warn");
+        setStatus(
+          transport === "serial"
+            ? "No answer on that COM port — Bluetooth pairings create two; try the other one (ignition on)."
+            : "The adapter stopped responding — check it's seated in the OBD port and the ignition is on, then try again.",
+          "warn"
+        );
+      } else if (transport === "serial" && err && err.name === "InvalidStateError") {
+        setStatus("That COM port is busy — close any other OBD software using the adapter and try again.", "warn");
       } else {
         setStatus("Couldn't connect. Make sure the adapter is powered (ignition on) and in range, then try again.", "warn");
       }
     } finally {
-      try { if (link) link.disconnect(); } catch { /* already gone */ }
-      btn.disabled = false;
+      try { if (link) await link.close(); } catch { /* already gone */ }
+      buttons.forEach((b) => (b.disabled = false));
       busy = false;
     }
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    const block = $("obd-reader");
-    block.hidden = false;
-    $("obd-btn").addEventListener("click", readCar);
+    $("obd-reader").hidden = false;
+
+    const bleBtn = $("obd-btn");
+    const serialBtn = $("obd-serial-btn");
+
+    if (hasBle) {
+      bleBtn.addEventListener("click", () => readCar("ble"));
+    } else {
+      // No BLE (rare on desktop) — promote serial to the primary button.
+      bleBtn.addEventListener("click", () => readCar("serial"));
+    }
+
+    if (hasSerial && hasBle) {
+      serialBtn.hidden = false;
+      serialBtn.addEventListener("click", () => readCar("serial"));
+    }
   });
 })();

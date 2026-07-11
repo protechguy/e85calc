@@ -26,10 +26,13 @@ tells you exactly how many gallons of E85 and pump gas to add.
   last setup, and shows a sticky live-result bar on phones so you can watch the
   blend change while you drag sliders.
 - **Read from car (alpha)** — on flex-fuel vehicles, one tap reads the ECU's
-  live ethanol % (OBD-II PID 0x52) and fuel level (PID 0x2F) over Web
-  Bluetooth and fills the calculator. Needs a Bluetooth LE ELM327 adapter
-  (Veepeak BLE, vLinker MC+, OBDLink CX…) and Chrome/Edge on Android or
-  desktop — iOS has no Web Bluetooth, so the button never appears there.
+  live ethanol % (OBD-II PID 0x52) and fuel level (PID 0x2F) and fills the
+  calculator. Two transports, Chrome/Edge only (iOS has neither API):
+  - **Web Bluetooth** — Bluetooth LE adapters (Veepeak BLE, vLinker MC+,
+    OBDLink CX…); Android + desktop.
+  - **Web Serial** — Bluetooth *Classic* adapters (OBDLink MX+, most cheap
+    ELM327s): pair in the OS first, then pick the COM port; also USB cables.
+    Desktop only.
 - Zero dependencies, zero build step — pure HTML/CSS/JS.
 
 ## Run it

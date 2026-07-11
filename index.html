@@ -56,17 +56,26 @@
       <div id="veh-note" class="veh-note" role="status"></div>
     </fieldset>
 
-    <!-- Web Bluetooth OBD-II readout — only revealed where the API exists -->
+    <!-- OBD-II readout — only revealed where Web Bluetooth / Web Serial exist -->
     <div id="obd-reader" class="obd-reader" hidden>
       <div class="obd-row">
         <button type="button" id="obd-btn" class="btn-neon">
           <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10-5 5V2l5 5L7 17"/></svg>
           READ FROM CAR
         </button>
+        <button type="button" id="obd-serial-btn" class="btn-neon" hidden>
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9z"/><path d="M8 9V6m8 3V6M12 17v4"/></svg>
+          PAIRED / SERIAL ADAPTER
+        </button>
         <span class="optional">fills tank mix &amp; fuel level from the ECU</span>
       </div>
       <p id="obd-status" class="obd-status" role="status"></p>
-      <p class="hint-block">Needs a Bluetooth&nbsp;LE OBD-II adapter (Veepeak BLE, vLinker MC+…) and ignition on. Ethanol readout is a flex-fuel thing.</p>
+      <p class="hint-block">
+        Ignition on. Bluetooth&nbsp;LE adapters (Veepeak BLE, vLinker MC+, OBDLink&nbsp;CX)
+        use READ FROM CAR. Classic-Bluetooth adapters (OBDLink&nbsp;MX+ and most ELM327s):
+        pair in Windows/macOS Bluetooth settings first, then use PAIRED&nbsp;/&nbsp;SERIAL
+        ADAPTER — desktop only. Ethanol readout is a flex-fuel thing.
+      </p>
     </div>
 
     <div class="field">
