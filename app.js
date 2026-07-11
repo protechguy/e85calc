@@ -6,45 +6,51 @@
  * Core blend math.
  *
  * You have `currentGal` gallons at `currentEth` ethanol fraction already in
- * the tank. You fill the remaining space with `x` gallons of E85-pump fuel
- * (at `e85Eth`) and `y` gallons of regular pump gas (at `pumpEth`) so the
- * full tank lands on `targetEth`:
+ * the tank. You add `add` gallons split between `x` of E85-pump fuel (at
+ * `e85Eth`) and `y` of regular pump gas (at `pumpEth`) so the fuel in the
+ * tank afterward lands on `targetEth`:
  *
- *   x + y = tank − currentGal
- *   (currentGal·currentEth + x·e85Eth + y·pumpEth) / tank = targetEth
+ *   x + y = add
+ *   (currentGal·currentEth + x·e85Eth + y·pumpEth) / (currentGal + add) = targetEth
  *
- * Solving for x:
- *   x = (tank·targetEth − currentGal·currentEth − space·pumpEth) / (e85Eth − pumpEth)
+ * Solving for x (with total = currentGal + add):
+ *   x = (total·targetEth − currentGal·currentEth − add·pumpEth) / (e85Eth − pumpEth)
  *
+ * `addGal` is optional — omitted means fill the tank (add = remaining space).
  * All ethanol values are fractions (0–1). Result is clamped to what is
  * physically possible and reports the achieved blend.
  */
-function calcBlend({ tank, currentGal, currentEth, pumpEth, e85Eth, targetEth }) {
+function calcBlend({ tank, currentGal, currentEth, pumpEth, e85Eth, targetEth, addGal }) {
   const space = Math.max(0, tank - currentGal);
+  const add = addGal == null ? space : Math.min(Math.max(0, addGal), space);
+  const total = currentGal + add;
   const denom = e85Eth - pumpEth;
 
   let x = denom > 0
-    ? (tank * targetEth - currentGal * currentEth - space * pumpEth) / denom
+    ? (total * targetEth - currentGal * currentEth - add * pumpEth) / denom
     : 0;
 
-  let status = "ok"; // ok | target_below | target_above | tank_full
+  let status = "ok"; // ok | target_below | target_above | tank_full | no_add
   if (space === 0) {
     x = 0;
     status = "tank_full";
+  } else if (add === 0) {
+    x = 0;
+    status = "no_add";
   } else if (x < 0) {
     x = 0; // even pure pump gas leaves the blend above target
     status = "target_below";
-  } else if (x > space) {
-    x = space; // even filling entirely with E85 can't reach target
+  } else if (x > add) {
+    x = add; // even adding pure E85 can't reach target
     status = "target_above";
   }
 
-  const y = space - x;
-  const finalEth = tank > 0
-    ? (currentGal * currentEth + x * e85Eth + y * pumpEth) / tank
+  const y = add - x;
+  const finalEth = total > 0
+    ? (currentGal * currentEth + x * e85Eth + y * pumpEth) / total
     : 0;
 
-  return { e85Gal: x, gasGal: y, finalEth, status };
+  return { e85Gal: x, gasGal: y, finalEth, status, totalGal: total };
 }
 
 /* ── DOM helpers ───────────────────────────────────────────────────────── */
@@ -59,6 +65,8 @@ const EL_IDS = {
   level: "fuel-level",
   levelOut: "fuel-level-out",
   currentEth: "current-eth",
+  fillMode: "fill-mode",
+  addGal: "add-gal",
   pumpType: "pump-type",
   pumpEth: "pump-eth",
   e85Eth: "e85-eth",
@@ -68,6 +76,7 @@ const EL_IDS = {
   addE85: "add-e85",
   addGas: "add-gas",
   finalBlend: "final-blend",
+  finalTotal: "final-total",
   statusMsg: "status-msg",
   needle: "gauge-needle",
   gaugeArc: "gauge-arc",
@@ -162,6 +171,7 @@ function setGauge(frac) {
 const STATUS_TEXT = {
   ok: { cls: "ok", msg: "Dialed in. Pump the amounts below and roll out. ✨" },
   tank_full: { cls: "warn", msg: "Tank is already full — burn some fuel before blending." },
+  no_add: { cls: "warn", msg: "Adding zero gallons — the blend stays at what's already in the tank." },
   target_below: {
     cls: "warn",
     msg: "The fuel already in your tank is richer than the target — even topping off with pure pump gas lands above it. Shown is the leanest blend you can reach without draining.",
@@ -180,6 +190,18 @@ function recalc() {
   const tank = Math.max(0, parseFloat(els.tank.value) || 0);
   const levelPct = +els.level.value;
   const currentGal = (tank * levelPct) / 100;
+  const space = Math.max(0, tank - currentGal);
+
+  const partial = els.fillMode.value === "partial";
+  els.addGal.disabled = !partial;
+  els.addGal.max = space.toFixed(1);
+  let addGal;
+  if (partial) {
+    addGal = Math.min(Math.max(0, parseFloat(els.addGal.value) || 0), space);
+  } else {
+    addGal = space;
+    els.addGal.value = space.toFixed(1);
+  }
 
   const inputs = {
     tank,
@@ -188,6 +210,7 @@ function recalc() {
     pumpEth: (parseFloat(els.pumpEth.value) || 0) / 100,
     e85Eth: (+els.e85Eth.value) / 100,
     targetEth: (+els.target.value) / 100,
+    addGal,
   };
 
   // Live slider readouts
@@ -199,6 +222,7 @@ function recalc() {
     els.addE85.innerHTML = fmtGal(0);
     els.addGas.innerHTML = fmtGal(0);
     els.finalBlend.textContent = "E0";
+    els.finalTotal.textContent = "0.0 gal";
     els.statusMsg.className = "status warn";
     els.statusMsg.textContent = "Enter your tank size to run the numbers.";
     setGauge(0);
@@ -211,6 +235,7 @@ function recalc() {
   els.addE85.innerHTML = fmtGal(r.e85Gal);
   els.addGas.innerHTML = fmtGal(r.gasGal);
   els.finalBlend.textContent = `E${Math.round(r.finalEth * 100)}`;
+  els.finalTotal.textContent = `${r.totalGal.toFixed(1)} gal`;
 
   const st = STATUS_TEXT[r.status];
   els.statusMsg.className = `status ${st.cls}`;
@@ -245,7 +270,7 @@ function init() {
   });
 
   ["input", "change"].forEach((evt) => {
-    [els.tank, els.level, els.currentEth, els.pumpEth, els.e85Eth, els.target]
+    [els.tank, els.level, els.currentEth, els.fillMode, els.addGal, els.pumpEth, els.e85Eth, els.target]
       .forEach((el) => el.addEventListener(evt, recalc));
   });
 
