@@ -1,6 +1,6 @@
 # 🚘 E85 Blend Lab
 
-**Live site: <https://protechguy.github.io/e85calc/>**
+**Live site: <https://e85calc.com>**
 
 A sleek, street-car-styled **E85 blend calculator** — retro California neon
 aesthetic with glassy panels, magenta/teal neon, and warm sunset accents.
