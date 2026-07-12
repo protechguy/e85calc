@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About E85 Blend Lab | E85 Blend Lab</title>
+<meta name="description" content="Who builds E85 Blend Lab, how the calculators work, where the data comes from, and how the site is funded. No accounts, no tracking, free to use.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0c13">
+<meta property="og:type" content="website">
+<meta property="og:title" content="About E85 Blend Lab">
+<meta property="og:description" content="Who builds it, how the math works, where the data comes from, how it's funded.">
+<meta property="og:url" content="https://e85calc.com/about.html">
+<meta property="og:image" content="https://e85calc.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://e85calc.com/about.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About E85 Blend Lab",
+  "url": "https://e85calc.com/about.html",
+  "description": "Who builds E85 Blend Lab, how the calculators work, where the data comes from, and how the site is funded."
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <svg class="logo-cob" width="52" height="52" viewBox="0 0 72 72" aria-hidden="true"
+           fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <g class="cob-husk" stroke="#3ee6e0" stroke-width="3">
+          <path d="M31 62 C15 57 7 42 9 24 C15 39 22 51 33 57"/>
+          <path d="M41 62 C57 57 65 42 63 24 C57 39 50 51 39 57"/>
+        </g>
+        <g class="cob-body" stroke="#ffc14d" stroke-width="3" fill="#ffc14d0d">
+          <path d="M36 4 C45 4 49 14 49 32 C49 50 44 64 36 64 C28 64 23 50 23 32 C23 14 27 4 36 4 Z"/>
+        </g>
+        <g class="cob-kernels" stroke="#ffc14d" stroke-width="1.6" opacity=".75">
+          <path d="M31 7 C29.5 22 29.5 46 31.5 61"/>
+          <path d="M36 4.5 L36 64"/>
+          <path d="M41 7 C42.5 22 42.5 46 40.5 61"/>
+          <path d="M24.5 16 Q36 19.5 47.5 16"/>
+          <path d="M23.5 28 Q36 31.5 48.5 28"/>
+          <path d="M23.5 40 Q36 43.5 48.5 40"/>
+          <path d="M25 52 Q36 55 47 52"/>
+        </g>
+      </svg>
+      <span class="logo-text"><span class="plate">E85</span> BLEND LAB</span>
+    </div>
+    <p class="tagline">STREET BLENDS &nbsp;•&nbsp; DIALED IN</p>
+    <nav class="site-nav" aria-label="Pages">
+      <a class="nav-link" href="./">BLEND CALC</a>
+      <a class="nav-link" href="costs.html">WORTH IT?</a>
+      <a class="nav-link" href="guides.html">GUIDES</a>
+    </nav>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="panel panel-article">
+    <h1 class="panel-title">ABOUT THE LAB</h1>
+    <div class="prose">
+      <p class="lede">E85 Blend Lab is a free set of tools for people who run
+      ethanol blends: a <a href="./">blend calculator</a> that tells you exactly
+      what to pump, a <a href="costs.html">cost-per-mile page</a> that tells you
+      whether it's worth it, and <a href="guides.html">guides</a> that skip the
+      forum folklore.</p>
+
+      <h2>HOW IT'S BUILT</h2>
+      <p>The site is plain HTML, CSS, and JavaScript — no accounts, no build
+      step, no tracking. It installs as an app and works offline at the pump.
+      The blend and cost math is open:
+      the <a href="https://github.com/protechguy/e85calc" rel="noopener">entire
+      source lives on GitHub</a>, tests included, if you want to check our
+      arithmetic or file an issue.</p>
+
+      <h2>WHERE THE DATA COMES FROM</h2>
+      <ul>
+        <li><strong>Flex-fuel compatibility</strong> — queried live from the US
+        EPA's fueleconomy.gov web services, covering every US-market vehicle
+        since 1984, engine by engine.</li>
+        <li><strong>Fuel energy figures</strong> — standard heating values
+        (gasoline ≈ 114,100 BTU/gal, ethanol ≈ 76,100 BTU/gal) behind the
+        cost-per-mile and break-even math.</li>
+        <li><strong>Tank sizes</strong> — a curated dataset of popular platforms;
+        always approximate, always verify in your owner's manual.</li>
+      </ul>
+
+      <h2>HOW IT'S FUNDED</h2>
+      <p>Some guides link to gear on Amazon (test kits, OBD adapters, flex-fuel
+      parts). As an Amazon Associate, the site earns from qualifying purchases —
+      at no extra cost to you. That's the entire business model; there are no
+      ads, sponsorships, or paywalls. See the <a href="privacy.html">privacy
+      page</a> for the full data story (spoiler: we don't collect any).</p>
+
+      <h2>THE FINE PRINT</h2>
+      <p>Everything here is an estimate to help you plan a fill — not fueling,
+      tuning, or mechanical advice. Verify tank capacity, fuel-system
+      compatibility, and actual ethanol content before running high blends, and
+      work with a tuner who knows your platform.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn-neon" href="./">TRY THE CALCULATOR →</a>
+      <a class="btn-neon btn-magenta" href="https://github.com/protechguy/e85calc" rel="noopener">SOURCE ON GITHUB →</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>E85 BLEND LAB — tuned for the street. Not fueling advice; verify capacities &amp; compatibility in your owner's manual.</p>
+  <p class="aff-disclosure">As an Amazon Associate, this site earns from qualifying purchases.</p>
+  <p class="footer-links"><a href="about.html">About</a> &nbsp;•&nbsp; <a href="privacy.html">Privacy</a> &nbsp;•&nbsp; <a href="https://github.com/protechguy/e85calc" rel="noopener">GitHub</a></p>
+</footer>
+
+</body>
+</html>

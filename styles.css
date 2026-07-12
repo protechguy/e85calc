@@ -909,6 +909,18 @@ input[type="range"]::-moz-range-thumb {
 
 .aff-disclosure { margin: 8px 0 0; font-size: .74rem; opacity: .75; }
 
+.footer-links { margin: 12px 0 0; font-size: .78rem; letter-spacing: .04em; }
+
+.footer-links a {
+  color: var(--text-dim);
+  text-decoration: underline;
+  text-decoration-color: #9aa1b944;
+  text-underline-offset: 3px;
+  transition: color .2s;
+}
+
+.footer-links a:hover, .footer-links a:focus-visible { color: var(--teal); outline: none; }
+
 .aff-link {
   color: var(--amber);
   text-decoration: underline;
