@@ -73,20 +73,49 @@ body::after {
 
 .logo { display: flex; align-items: center; gap: 18px; }
 
-/* license-plate logo mark */
+/* neon corn cob mark — amber kernels, teal husk, tube-sign glow */
+.logo-cob {
+  width: clamp(44px, 6vw, 58px);
+  height: auto;
+  flex-shrink: 0;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.logo-cob .cob-body path {
+  stroke: var(--amber);
+  stroke-width: 3;
+  fill: #ffc14d0d;
+  filter: drop-shadow(0 0 5px #ffc14d99) drop-shadow(0 0 14px #ffc14d40);
+}
+
+.logo-cob .cob-kernels path {
+  stroke: var(--amber);
+  stroke-width: 1.6;
+  opacity: .75;
+}
+
+.logo-cob .cob-husk path {
+  stroke: var(--teal);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 5px #3ee6e099) drop-shadow(0 0 14px #3ee6e040);
+}
+
+/* license-plate logo mark — pump-sign green */
 .plate {
   font-family: var(--font-display);
   font-size: .72em;
   padding: 6px 14px 5px;
-  border: 2px solid var(--magenta);
+  border: 2px solid var(--green);
   border-radius: 9px;
-  color: var(--magenta-hot);
-  background: #2b1018;
+  color: #8df5b4;
+  background: #0c2b1a;
   letter-spacing: .1em;
   box-shadow:
-    0 0 18px #ff558559,
-    inset 0 0 14px #ff55852b;
-  text-shadow: 0 0 12px #ff5585aa;
+    0 0 18px #2bd96a59,
+    inset 0 0 14px #2bd96a2b;
+  text-shadow: 0 0 12px #2bd96aaa;
 }
 
 .logo h1 {
@@ -99,7 +128,8 @@ body::after {
   font-size: clamp(1.5rem, 4.2vw, 2.4rem);
   letter-spacing: .1em;
   text-transform: uppercase;
-  text-shadow: 0 2px 24px #00000088;
+  color: var(--amber);
+  text-shadow: 0 0 22px #ffc14d55, 0 2px 24px #00000088;
 }
 
 .tagline {
@@ -221,6 +251,30 @@ body::after {
 .badge-ffv  { background: #0d3524; border: 1px solid #2bd96a55; color: var(--green); box-shadow: 0 0 12px #2bd96a22; }
 .badge-mod  { background: #3a2c10; border: 1px solid #ffc14d55; color: var(--amber); }
 .badge-sub  { flex-basis: 100%; font-size: .8rem; color: var(--text-dim); line-height: 1.4; }
+
+/* ── OBD-II reader ──────────────────────────────────────────────────── */
+.obd-reader {
+  border: 1px dashed var(--line);
+  border-radius: 14px;
+  padding: 14px 16px 12px;
+  margin: 0 0 22px;
+  background: #ffffff05;
+}
+
+.obd-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.obd-status { margin: 10px 0 0; font-size: .88rem; font-weight: 500; line-height: 1.45; }
+.obd-status:empty { display: none; }
+.obd-status.busy { color: var(--teal); }
+.obd-status.ok   { color: #a9efc7; }
+.obd-status.warn { color: var(--amber); }
+
+.obd-reader .hint-block { margin-top: 10px; }
 
 /* ── Fields ─────────────────────────────────────────────────────────── */
 .field { margin-bottom: 20px; }
@@ -759,6 +813,7 @@ input[type="range"]::-moz-range-thumb {
 .ico-solid { fill: currentColor; stroke: none; }
 
 .badge .ico, .compat-verdict .ico { margin-right: 4px; }
+.btn-neon .ico { margin-right: 5px; }
 
 /* ── No-JS fallback ─────────────────────────────────────────────────── */
 .noscript-banner {

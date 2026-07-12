@@ -1,9 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- E85 Blend Lab — neon license-plate mark -->
+  <!-- E85 Blend Lab — neon corn cob mark -->
   <rect width="512" height="512" rx="96" fill="#0a0c13"/>
-  <rect x="64" y="150" width="384" height="212" rx="40" fill="#2b1018" stroke="#ff5585" stroke-width="14"/>
-  <rect x="64" y="150" width="384" height="212" rx="40" fill="none" stroke="#ff5585" stroke-width="30" opacity=".22"/>
-  <text x="256" y="298" text-anchor="middle" font-family="Righteous, Arial Black, sans-serif" font-size="128" letter-spacing="8" fill="#ff9bb0">E85</text>
-  <path d="M96 416h320" stroke="#3ee6e0" stroke-width="10" stroke-linecap="round" opacity=".85"/>
-  <path d="M96 416h320" stroke="#3ee6e0" stroke-width="26" stroke-linecap="round" opacity=".22"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(76 40) scale(5)">
+    <!-- husk halo + tubes (teal) -->
+    <g stroke="#3ee6e0">
+      <g opacity=".25" stroke-width="9">
+        <path d="M31 62 C15 57 7 42 9 24 C15 39 22 51 33 57"/>
+        <path d="M41 62 C57 57 65 42 63 24 C57 39 50 51 39 57"/>
+      </g>
+      <g stroke-width="3">
+        <path d="M31 62 C15 57 7 42 9 24 C15 39 22 51 33 57"/>
+        <path d="M41 62 C57 57 65 42 63 24 C57 39 50 51 39 57"/>
+      </g>
+    </g>
+    <!-- cob halo + tube (amber) -->
+    <g stroke="#ffc14d">
+      <path opacity=".25" stroke-width="9" d="M36 4 C45 4 49 14 49 32 C49 50 44 64 36 64 C28 64 23 50 23 32 C23 14 27 4 36 4 Z"/>
+      <path stroke-width="3" fill="#ffc14d14" d="M36 4 C45 4 49 14 49 32 C49 50 44 64 36 64 C28 64 23 50 23 32 C23 14 27 4 36 4 Z"/>
+      <!-- kernel lattice -->
+      <g stroke-width="1.6" opacity=".8">
+        <path d="M31 7 C29.5 22 29.5 46 31.5 61"/>
+        <path d="M36 4.5 L36 64"/>
+        <path d="M41 7 C42.5 22 42.5 46 40.5 61"/>
+        <path d="M24.5 16 Q36 19.5 47.5 16"/>
+        <path d="M23.5 28 Q36 31.5 48.5 28"/>
+        <path d="M23.5 40 Q36 43.5 48.5 40"/>
+        <path d="M25 52 Q36 55 47 52"/>
+      </g>
+    </g>
+  </g>
+  <!-- neon ground line -->
+  <path d="M116 432h280" stroke="#ff5585" stroke-width="10" stroke-linecap="round" opacity=".85"/>
+  <path d="M116 432h280" stroke="#ff5585" stroke-width="26" stroke-linecap="round" opacity=".22"/>
 </svg>
