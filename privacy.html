@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Privacy | E85 Blend Lab</title>
-<meta name="description" content="E85 Blend Lab collects no personal data: no accounts, no analytics, no cookies of our own. Settings stay in your browser. The full, short privacy story.">
+<meta name="description" content="E85 Blend Lab keeps it light: no accounts, no ads, anonymous Google Analytics only. Settings stay in your browser. The full, short privacy story.">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0a0c13">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Privacy | E85 Blend Lab">
-<meta property="og:description" content="No accounts, no analytics, no cookies of our own. Settings stay in your browser.">
+<meta property="og:description" content="No accounts, no ads, anonymous analytics only. Settings stay in your browser.">
 <meta property="og:url" content="https://e85calc.com/privacy.html">
 <meta property="og:image" content="https://e85calc.com/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -28,9 +28,10 @@
   "@type": "WebPage",
   "name": "Privacy",
   "url": "https://e85calc.com/privacy.html",
-  "description": "E85 Blend Lab collects no personal data: no accounts, no analytics, no cookies of our own."
+  "description": "E85 Blend Lab keeps it light: no accounts, no ads, anonymous Google Analytics only."
 }
 </script>
+<script src="analytics.js" async></script>
 </head>
 <body>
 
@@ -71,8 +72,9 @@
   <section class="panel panel-article">
     <h1 class="panel-title">PRIVACY</h1>
     <div class="prose">
-      <p class="lede">The short version: <strong>we collect nothing.</strong>
-      No accounts, no analytics, no ad networks, no cookies of our own.</p>
+      <p class="lede">The short version: <strong>no accounts, no ads, nothing
+      sold.</strong> The site runs anonymous Google Analytics so we know which
+      pages actually help people — and that's the extent of the data story.</p>
 
       <h2>WHAT STAYS ON YOUR DEVICE</h2>
       <ul>
@@ -87,10 +89,15 @@
 
       <h2>THIRD PARTIES YOUR BROWSER TALKS TO</h2>
       <ul>
+        <li><strong>Google Analytics</strong> — anonymous usage stats: pages
+        visited, device type, general region. Google sets its <code>_ga</code>
+        cookies for this, governed by Google's own privacy policy. We use it to
+        decide what content to build next — nothing here identifies you, and
+        any ad blocker (or Google's opt-out add-on) stops it without affecting
+        the calculators.</li>
         <li><strong>Hostinger</strong> hosts the site and, like any web server,
-        sees standard request logs (IP address, pages requested).</li>
-        <li><strong>Google Fonts</strong> serves the two typefaces; Google may
-        log those font requests.</li>
+        sees standard request logs (IP address, pages requested). Fonts are
+        self-hosted, so there's no font CDN in the picture.</li>
         <li><strong>The EPA's fueleconomy.gov</strong> answers the flex-fuel
         compatibility lookups — your browser queries it directly with the
         year/make/model you select, nothing more.</li>

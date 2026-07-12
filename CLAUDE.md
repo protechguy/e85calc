@@ -101,8 +101,11 @@ are still field-unverified.
 or executable inline scripts anywhere**. JSON-LD `<script type=
 "application/ld+json">` blocks are fine (not executable). Setting styles from
 JS via `el.style.x` is fine (CSSOM). A `style=""` attribute in markup will
-silently break. `connect-src` allowlists `https://www.fueleconomy.gov` —
-add origins there if you ever call something new.
+silently break. `connect-src` allowlists `https://www.fueleconomy.gov` plus the Google
+Analytics origins (`*.googletagmanager.com`, `*.google-analytics.com`,
+`*.analytics.google.com`) — add origins there if you ever call something
+new. GA4 (`G-BTQMP06LL3`) loads via same-origin `analytics.js` precisely
+because inline scripts are banned.
 
 ### 7. Windows dev-machine quirks
 - `python`/`python3` are broken Microsoft Store stubs. Real interpreter:
@@ -188,8 +191,9 @@ AND the ItemList JSON-LD in guides.html; CTAs deep-link the calculator with
    writes HTML files (still zero *runtime* build). The long-tail SEO moat.
 2. **Liters/metric mode** — last original roadmap item.
 3. **BLE + true-FFV field test** of the OBD feature (needs a flex-fuel car).
-4. GoatCounter analytics if the owner ever wants visit data (privacy page
-   must be updated if so).
+4. ~~Analytics~~ — done: GA4 property `G-BTQMP06LL3` via `analytics.js` on
+   every page. The privacy page describes it honestly; if analytics ever
+   changes or leaves, update privacy.html + about.html + the CSP together.
 5. Asset-version query strings (`styles.css?v=N`) only if cache staleness
    ever resurfaces despite the SW fix.
 
