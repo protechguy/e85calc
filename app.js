@@ -368,6 +368,18 @@ function restoreState() {
   } catch { /* corrupt or unavailable — defaults are fine */ }
 }
 
+/* URL presets (?tank=23&target=30) — guide pages deep-link the calculator.
+   Params win over saved state; junk values are ignored. */
+function applyUrlParams() {
+  const params = new URLSearchParams(location.search);
+  const tank = parseFloat(params.get("tank"));
+  const target = parseFloat(params.get("target"));
+  if (tank > 0 && tank <= 200) els.tank.value = tank;
+  if (target >= +els.target.min && target <= +els.target.max) {
+    els.target.value = Math.round(target);
+  }
+}
+
 /* ── Tube-tester helper ───────────────────────────────────────────────── */
 function recalcTest() {
   const pct = calcTubeTest({
@@ -413,10 +425,17 @@ function applyPumpType() {
 }
 
 function init() {
+  // Offline support registers on every page, calculator or not.
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
+
   for (const [key, id] of Object.entries(EL_IDS)) els[key] = $(id);
+  if (!els.tank) return; // guide pages load app.js only for shared icons
 
   populateYears();
   restoreState();
+  applyUrlParams();
   applyPumpType();
 
   els.year.addEventListener("change", () => { refreshMakes(); });
@@ -437,11 +456,6 @@ function init() {
   initTester();
   initQuickbar();
   recalc();
-
-  // Offline support (no-op where service workers are unavailable).
-  if ("serviceWorker" in navigator && location.protocol === "https:") {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
-  }
 }
 
 // Export for tests (Node) without breaking the browser.

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Test E85 Ethanol Content — The $10 Tube Test | E85 Blend Lab</title>
+<meta name="description" content="Pump E85 can be anything from E51 to E83. Test actual ethanol content in two minutes with a graduated tube and water — step by step, with the math done for you.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0c13">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to Test E85 Ethanol Content — The $10 Tube Test">
+<meta property="og:description" content="Two minutes with a graduated tube and water tells you what the pump actually sold you. Step by step.">
+<meta property="og:url" content="https://e85calc.com/how-to-test-e85.html">
+<meta property="og:image" content="https://e85calc.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://e85calc.com/how-to-test-e85.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "HowTo",
+      "name": "Test E85 ethanol content with a graduated tube",
+      "description": "Measure actual ethanol percentage using the water-absorption method.",
+      "step": [
+        { "@type": "HowToStep", "text": "Fill the graduated tube with water to a marked line (for example 2 ml)." },
+        { "@type": "HowToStep", "text": "Add fuel from the pump up to a second marked line (for example 10 ml total)." },
+        { "@type": "HowToStep", "text": "Cap and shake hard for 15–30 seconds, then let it settle for a few minutes." },
+        { "@type": "HowToStep", "text": "Read where the separation line settled. Ethanol bonds with the water, so the line rises — the rise divided by the fuel volume is your ethanol fraction." }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why test E85 at all?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Pump E85 legally ranges from 51% to 83% ethanol by season. If you blend to a target or run a dedicated tune, that 30-point swing is the difference between dialed-in and knocking." }
+        },
+        {
+          "@type": "Question",
+          "name": "How accurate is the tube test?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Within a few percent — it ignores the small volume contraction when water and ethanol mix, the same simplification printed tester scales use. Plenty accurate for blending; tuners chasing exact numbers use an ethanol content sensor instead." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <svg class="logo-cob" width="52" height="52" viewBox="0 0 72 72" aria-hidden="true"
+           fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <g class="cob-husk" stroke="#3ee6e0" stroke-width="3">
+          <path d="M31 62 C15 57 7 42 9 24 C15 39 22 51 33 57"/>
+          <path d="M41 62 C57 57 65 42 63 24 C57 39 50 51 39 57"/>
+        </g>
+        <g class="cob-body" stroke="#ffc14d" stroke-width="3" fill="#ffc14d0d">
+          <path d="M36 4 C45 4 49 14 49 32 C49 50 44 64 36 64 C28 64 23 50 23 32 C23 14 27 4 36 4 Z"/>
+        </g>
+        <g class="cob-kernels" stroke="#ffc14d" stroke-width="1.6" opacity=".75">
+          <path d="M31 7 C29.5 22 29.5 46 31.5 61"/>
+          <path d="M36 4.5 L36 64"/>
+          <path d="M41 7 C42.5 22 42.5 46 40.5 61"/>
+          <path d="M24.5 16 Q36 19.5 47.5 16"/>
+          <path d="M23.5 28 Q36 31.5 48.5 28"/>
+          <path d="M23.5 40 Q36 43.5 48.5 40"/>
+          <path d="M25 52 Q36 55 47 52"/>
+        </g>
+      </svg>
+      <span class="logo-text"><span class="plate">E85</span> BLEND LAB</span>
+    </div>
+    <p class="tagline">STREET BLENDS &nbsp;•&nbsp; DIALED IN</p>
+    <nav class="site-nav" aria-label="Pages">
+      <a class="nav-link" href="./">BLEND CALC</a>
+      <a class="nav-link" href="costs.html">WORTH IT?</a>
+      <a class="nav-link is-current" href="guides.html" aria-current="page">GUIDES</a>
+    </nav>
+  </div>
+</header>
+
+<main class="layout">
+  <article class="panel panel-article">
+    <a class="crumb" href="guides.html">← ALL GUIDES</a>
+    <h1 class="panel-title">HOW TO TEST ETHANOL CONTENT</h1>
+    <div class="prose">
+      <p class="lede">"E85" at the pump legally ranges from <strong>E51 to E83</strong>
+      by season and region. If you blend to a target or run a dedicated tune, that
+      30-point swing matters — and a <strong>two-minute test with water</strong>
+      settles it.</p>
+
+      <h2>WHAT YOU NEED</h2>
+      <p>A graduated ethanol test tube — a few dollars, lives in the glovebox.
+      <a class="aff-link" href="https://www.amazon.com/s?k=e85+ethanol+fuel+test+kit&amp;tag=dosecomp-20" target="_blank" rel="sponsored noopener">Grab a tester on Amazon</a>.
+      A narrow graduated cylinder from a kitchen-scale kit works in a pinch.</p>
+
+      <h2>THE TEST</h2>
+      <ol>
+        <li><strong>Water to the line.</strong> Fill the tube with water to a marked
+        line — say 2 ml.</li>
+        <li><strong>Fuel to the top line.</strong> Add pump fuel up to the fill mark —
+        say 10 ml total.</li>
+        <li><strong>Shake and settle.</strong> Cap it, shake hard for 15–30 seconds,
+        then let it sit a few minutes.</li>
+        <li><strong>Read the line.</strong> Ethanol leaves the gasoline and bonds
+        with the water, so the separation line rises. The rise, divided by how much
+        fuel you added, is your ethanol percentage.</li>
+      </ol>
+      <p><strong>Example:</strong> water at 2 ml, filled to 10 ml (so 8 ml of fuel),
+      line settles at 8.8 ml → it rose 6.8 ml → 6.8 ÷ 8 = <strong>E85</strong>.
+      Line doesn't move at all? That's E0.</p>
+
+      <h2>SKIP THE ARITHMETIC</h2>
+      <p>The <a href="./">blend calculator</a> has this built in — open
+      <strong>TEST YOUR FUEL</strong>, punch in your three readings, and one tap
+      drops the result straight into the blend math as your E85 pump's actual
+      content or your tank's current mix.</p>
+
+      <h2>FAQ</h2>
+      <h3>How accurate is this?</h3>
+      <p>Within a few percent. It ignores the small volume shrink when water and
+      ethanol mix — the same simplification the printed scales on commercial
+      testers make. For blending, plenty. For live-tune precision, run an
+      <a href="e85-conversion-guide.html">ethanol content sensor</a>.</p>
+      <h3>When should I test?</h3>
+      <p>Any fill that matters (dyno day, track day), any new station, and always
+      during <a href="winter-vs-summer-e85.html">seasonal changeover</a> months —
+      that's when the pump swings hardest.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn-neon" href="./">OPEN THE CALCULATOR →</a>
+      <a class="btn-neon btn-magenta" href="winter-vs-summer-e85.html">WHY IT VARIES →</a>
+    </div>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p>E85 BLEND LAB — tuned for the street. Not fueling advice; verify capacities &amp; compatibility in your owner's manual.</p>
+  <p class="aff-disclosure">As an Amazon Associate, this site earns from qualifying purchases.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E85 Conversion Guide — What It Takes &amp; What It Costs | E85 Blend Lab</title>
+<meta name="description" content="Converting a non-flex-fuel car to E85: tune vs flex-fuel kit, injector sizing, pump requirements, lines and seals, realistic costs, and where to start.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0c13">
+<meta property="og:type" content="article">
+<meta property="og:title" content="E85 Conversion Guide — What It Takes &amp; What It Costs">
+<meta property="og:description" content="Tune vs flex-fuel kit, injector sizing, pump headroom, lines and seals — the honest parts list and price ranges.">
+<meta property="og:url" content="https://e85calc.com/e85-conversion-guide.html">
+<meta property="og:image" content="https://e85calc.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://e85calc.com/e85-conversion-guide.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "E85 Conversion Guide — What It Takes & What It Costs",
+      "description": "Converting a non-flex-fuel car to E85: tune vs flex-fuel kit, injector sizing, pump requirements, lines and seals, realistic costs.",
+      "url": "https://e85calc.com/e85-conversion-guide.html"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How much does an E85 conversion cost?",
+          "acceptedAnswer": { "@type": "Answer", "text": "For a modern EFI car: roughly $300–700 for a flex-fuel kit or $400–800 for a dedicated tune, $200–500 for injectors, and $150–400 for a pump if yours lacks headroom. A typical full setup lands between $700 and $2,000 installed, platform depending." }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need a flex-fuel kit or just a tune?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A dedicated tune is cheaper but locks you to one blend — you must fill consistently. A flex-fuel kit adds an ethanol content sensor so the ECU adapts to whatever blend is in the tank, which suits drivers who can't always find E85." }
+        },
+        {
+          "@type": "Question",
+          "name": "How much bigger do E85 injectors need to be?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Plan on roughly 30–40% more flow than the same power level on gasoline, and keep injector duty cycle under about 85% at peak. Size for the blend you actually intend to run." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <svg class="logo-cob" width="52" height="52" viewBox="0 0 72 72" aria-hidden="true"
+           fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <g class="cob-husk" stroke="#3ee6e0" stroke-width="3">
+          <path d="M31 62 C15 57 7 42 9 24 C15 39 22 51 33 57"/>
+          <path d="M41 62 C57 57 65 42 63 24 C57 39 50 51 39 57"/>
+        </g>
+        <g class="cob-body" stroke="#ffc14d" stroke-width="3" fill="#ffc14d0d">
+          <path d="M36 4 C45 4 49 14 49 32 C49 50 44 64 36 64 C28 64 23 50 23 32 C23 14 27 4 36 4 Z"/>
+        </g>
+        <g class="cob-kernels" stroke="#ffc14d" stroke-width="1.6" opacity=".75">
+          <path d="M31 7 C29.5 22 29.5 46 31.5 61"/>
+          <path d="M36 4.5 L36 64"/>
+          <path d="M41 7 C42.5 22 42.5 46 40.5 61"/>
+          <path d="M24.5 16 Q36 19.5 47.5 16"/>
+          <path d="M23.5 28 Q36 31.5 48.5 28"/>
+          <path d="M23.5 40 Q36 43.5 48.5 40"/>
+          <path d="M25 52 Q36 55 47 52"/>
+        </g>
+      </svg>
+      <span class="logo-text"><span class="plate">E85</span> BLEND LAB</span>
+    </div>
+    <p class="tagline">STREET BLENDS &nbsp;•&nbsp; DIALED IN</p>
+    <nav class="site-nav" aria-label="Pages">
+      <a class="nav-link" href="./">BLEND CALC</a>
+      <a class="nav-link" href="costs.html">WORTH IT?</a>
+      <a class="nav-link is-current" href="guides.html" aria-current="page">GUIDES</a>
+    </nav>
+  </div>
+</header>
+
+<main class="layout">
+  <article class="panel panel-article">
+    <a class="crumb" href="guides.html">← ALL GUIDES</a>
+    <h1 class="panel-title">E85 CONVERSION GUIDE</h1>
+    <div class="prose">
+      <p class="lede">Not factory flex-fuel? (<a href="can-my-car-run-e85.html">Check
+      first</a> — you might be surprised.) Most modern EFI engines convert well.
+      Here's the honest parts list, in the order that matters.</p>
+
+      <h2>1. THE BRAIN: TUNE OR FLEX-FUEL KIT</h2>
+      <p>E85 needs roughly a third more fuel volume and rewards different ignition
+      timing — the stock calibration won't do. Two routes:</p>
+      <ul>
+        <li><strong>Dedicated tune ($400–800)</strong> — a tuner calibrates for one
+        target blend. Cheapest path, but you must fill consistently:
+        <a href="how-to-test-e85.html">test your fuel</a> and use the
+        <a href="./">blend calculator</a> to hit the same mix every tank.</li>
+        <li><strong>Flex-fuel kit ($300–700)</strong> — adds an ethanol content
+        sensor in the fuel line so the ECU reads the actual blend and adapts on the
+        fly. Fill with whatever's available; the car sorts it out. The right answer
+        for daily drivers.
+        <a class="aff-link" href="https://www.amazon.com/s?k=flex+fuel+kit+ethanol+content+sensor&amp;tag=dosecomp-20" target="_blank" rel="sponsored noopener">Browse flex-fuel kits &amp; sensors on Amazon</a>.</li>
+      </ul>
+
+      <h2>2. INJECTORS: +30–40% FLOW</h2>
+      <p>Size injectors for about <strong>30–40% more flow</strong> than the same
+      power on gasoline, keeping duty cycle under ~85% at peak. Going a size up
+      rarely hurts on modern EFI — going a size down always does.
+      <a class="aff-link" href="https://www.amazon.com/s?k=high+flow+fuel+injectors&amp;tag=dosecomp-20" target="_blank" rel="sponsored noopener">Shop high-flow injectors</a> —
+      but match part numbers to your platform forum's proven combos before buying.</p>
+
+      <h2>3. PUMP: HEADROOM, NOT HOPE</h2>
+      <p>Your pump must move that extra volume at full load. Many stock pumps hang
+      on at E85 street power and quit the moment boost goes up. An E85-rated pump
+      runs <strong>$150–400</strong>; if you're already inside the tank, do it once.</p>
+
+      <h2>4. LINES &amp; SEALS (OLDER CARS)</h2>
+      <p>Fuel systems from roughly the mid-'90s onward tolerate ethanol well.
+      Older rubber lines, cork gaskets, and zinc/aluminum carb parts don't —
+      pre-OBD2 builds should budget for ethanol-compatible (SAE 30R9) hose and
+      seals throughout.</p>
+
+      <h2>THE SANE PATH</h2>
+      <ol>
+        <li><a href="can-my-car-run-e85.html">Confirm you're actually not flex-fuel</a>.</li>
+        <li>Start with a <a href="e30-blend.html">E30 blend</a> — many stock fuel
+        systems handle it with just a tune, and it captures most of the knock
+        benefit.</li>
+        <li>Scale to <a href="e50-blend.html">E50</a> or full E85 only when the
+        injectors and pump have proven headroom.</li>
+        <li>Work with a tuner who knows your platform. Every generalization above
+        loses to platform-specific knowledge.</li>
+      </ol>
+
+      <h2>FAQ</h2>
+      <h3>How much does a full conversion cost?</h3>
+      <p>Typically <strong>$700–2,000 installed</strong> on a modern EFI car:
+      kit or tune, injectors, and usually a pump. Boosted builds trend higher.</p>
+      <h3>Kit or tune?</h3>
+      <p>Daily driver near spotty E85 stations → flex kit. Dedicated build with a
+      consistent fill routine → tune is cheaper and simpler.</p>
+      <h3>Is it reversible?</h3>
+      <p>Entirely. Flash back the tune; the hardware happily runs gasoline.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn-neon" href="./?target=30">START WITH E30 →</a>
+      <a class="btn-neon btn-magenta" href="costs.html">RUN THE COST MATH →</a>
+    </div>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p>E85 BLEND LAB — tuned for the street. Not fueling advice; verify capacities &amp; compatibility in your owner's manual.</p>
+  <p class="aff-disclosure">As an Amazon Associate, this site earns from qualifying purchases.</p>
+</footer>
+
+</body>
+</html>

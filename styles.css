@@ -118,7 +118,7 @@ body::after {
   text-shadow: 0 0 12px #2bd96aaa;
 }
 
-.logo h1 {
+.logo h1, .logo .logo-text {
   margin: 0;
   display: flex;
   align-items: center;
@@ -131,6 +131,9 @@ body::after {
   color: var(--amber);
   text-shadow: 0 0 22px #ffc14d55, 0 2px 24px #00000088;
 }
+
+/* on guide pages the article title is the h1 instead of the logo */
+h1.panel-title { font-size: 1.35rem; letter-spacing: .14em; line-height: 1.35; }
 
 .tagline {
   margin: 12px 0 0 2px;
@@ -1006,6 +1009,117 @@ input[type="range"]::-moz-range-thumb {
   .quickbar { display: flex; }
   body.has-quickbar .site-footer { padding-bottom: 96px; }
 }
+
+/* ── Guide articles ─────────────────────────────────────────────────── */
+.panel-article {
+  grid-column: 1 / -1;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  justify-self: center;
+}
+
+.crumb {
+  display: inline-block;
+  margin-bottom: 14px;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+.crumb:hover, .crumb:focus-visible { color: var(--teal); outline: none; }
+
+.prose { max-width: 68ch; }
+
+.prose h2 {
+  margin: 30px 0 12px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.05rem;
+  letter-spacing: .08em;
+  color: var(--teal);
+}
+
+.prose h3 {
+  margin: 22px 0 8px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: .92rem;
+  letter-spacing: .06em;
+  color: var(--sunset);
+}
+
+.prose p { margin: 0 0 14px; line-height: 1.65; }
+
+.prose ul, .prose ol { margin: 0 0 14px; padding-left: 22px; display: grid; gap: 8px; line-height: 1.55; }
+
+.prose strong { color: var(--amber); font-weight: 600; }
+
+.prose a:not(.btn-neon) { color: var(--teal); text-decoration: underline; text-decoration-color: #3ee6e055; text-underline-offset: 3px; }
+.prose a:not(.btn-neon):hover { text-decoration-color: var(--teal); }
+
+.lede { font-size: 1.05rem; color: var(--text); }
+
+/* call-to-action row at the bottom of guides */
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 26px 0 6px;
+}
+
+a.btn-neon { text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+
+a.btn-magenta {
+  border-color: var(--magenta);
+  color: var(--magenta-hot);
+}
+
+a.btn-magenta:hover, a.btn-magenta:focus-visible {
+  background: #ff558514;
+  box-shadow: 0 0 14px #ff558555;
+  outline: none;
+}
+
+/* guides index cards */
+.guide-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.guide-list a {
+  display: block;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel-deep);
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.guide-list a:hover, .guide-list a:focus-visible {
+  border-color: var(--teal);
+  box-shadow: 0 0 16px #3ee6e022;
+  outline: none;
+}
+
+.guide-list .g-title {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: .95rem;
+  letter-spacing: .05em;
+  margin-bottom: 5px;
+  color: var(--amber);
+}
+
+.guide-list .g-desc { display: block; font-size: .88rem; color: var(--text-dim); line-height: 1.45; }
 
 /* ── Motion preferences ─────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Can My Car Run E85? Flex Fuel Checker by Year, Make &amp; Model | E85 Blend Lab</title>
+<meta name="description" content="Check if your car is factory flex-fuel, engine by engine, using live EPA data for every US vehicle since 1984 — plus what it takes if it isn't.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0c13">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Can My Car Run E85? Flex Fuel Checker">
+<meta property="og:description" content="Look up your exact year, make, model, and engine against live EPA data — right on the page.">
+<meta property="og:url" content="https://e85calc.com/can-my-car-run-e85.html">
+<meta property="og:image" content="https://e85calc.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://e85calc.com/can-my-car-run-e85.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Can My Car Run E85? Flex Fuel Checker by Year, Make & Model",
+      "description": "Check if your car is factory flex-fuel, engine by engine, using live EPA data for every US vehicle since 1984.",
+      "url": "https://e85calc.com/can-my-car-run-e85.html"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I know if my car is flex fuel?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Look for a yellow fuel cap or filler ring, a Flex Fuel / E85 badge on the tailgate, a sticker inside the fuel door, or check your owner's manual. Or look your exact model and engine up against EPA records with the checker on this page." }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens if I put E85 in a non-flex-fuel car?",
+          "acceptedAnswer": { "@type": "Answer", "text": "One partial fill usually causes a lean condition and a check-engine light rather than damage — dilute it with gasoline as soon as practical. Repeated or full tanks risk drivability problems and long-term fuel-system wear on unprepared vehicles." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can a non-flex car be converted to E85?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Usually yes: an ethanol-calibrated tune or flex-fuel kit, injectors with roughly 30–40% more flow, and an E85-rated pump cover most modern EFI engines. Older vehicles may also need ethanol-compatible lines and seals." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <svg class="logo-cob" width="52" height="52" viewBox="0 0 72 72" aria-hidden="true"
+           fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <g class="cob-husk" stroke="#3ee6e0" stroke-width="3">
+          <path d="M31 62 C15 57 7 42 9 24 C15 39 22 51 33 57"/>
+          <path d="M41 62 C57 57 65 42 63 24 C57 39 50 51 39 57"/>
+        </g>
+        <g class="cob-body" stroke="#ffc14d" stroke-width="3" fill="#ffc14d0d">
+          <path d="M36 4 C45 4 49 14 49 32 C49 50 44 64 36 64 C28 64 23 50 23 32 C23 14 27 4 36 4 Z"/>
+        </g>
+        <g class="cob-kernels" stroke="#ffc14d" stroke-width="1.6" opacity=".75">
+          <path d="M31 7 C29.5 22 29.5 46 31.5 61"/>
+          <path d="M36 4.5 L36 64"/>
+          <path d="M41 7 C42.5 22 42.5 46 40.5 61"/>
+          <path d="M24.5 16 Q36 19.5 47.5 16"/>
+          <path d="M23.5 28 Q36 31.5 48.5 28"/>
+          <path d="M23.5 40 Q36 43.5 48.5 40"/>
+          <path d="M25 52 Q36 55 47 52"/>
+        </g>
+      </svg>
+      <span class="logo-text"><span class="plate">E85</span> BLEND LAB</span>
+    </div>
+    <p class="tagline">STREET BLENDS &nbsp;•&nbsp; DIALED IN</p>
+    <nav class="site-nav" aria-label="Pages">
+      <a class="nav-link" href="./">BLEND CALC</a>
+      <a class="nav-link" href="costs.html">WORTH IT?</a>
+      <a class="nav-link is-current" href="guides.html" aria-current="page">GUIDES</a>
+    </nav>
+  </div>
+</header>
+
+<main class="layout">
+  <article class="panel panel-article">
+    <a class="crumb" href="guides.html">← ALL GUIDES</a>
+    <h1 class="panel-title">CAN MY CAR RUN E85?</h1>
+    <div class="prose">
+      <p class="lede">The fast checks: a <strong>yellow fuel cap</strong>, a
+      <strong>Flex Fuel / E85 badge</strong>, or a sticker inside the fuel door all
+      mean you're factory-ready. No badge? Look your car up below — it checks
+      <strong>live EPA records for every US-market vehicle since 1984</strong>,
+      engine by engine, because many models shipped both ways.</p>
+    </div>
+
+    <div class="veh-row compat-row">
+      <select id="compat-year" aria-label="Compatibility check: vehicle year">
+        <option value="">Year</option>
+      </select>
+      <select id="compat-make" aria-label="Compatibility check: vehicle make" disabled>
+        <option value="">Make</option>
+      </select>
+      <select id="compat-model" aria-label="Compatibility check: vehicle model" disabled>
+        <option value="">Model</option>
+      </select>
+    </div>
+
+    <p id="compat-status" class="compat-status" role="status" hidden></p>
+    <div id="compat-verdict" class="compat-verdict" hidden></div>
+    <div id="compat-tank" class="compat-tank" hidden></div>
+    <ul id="compat-variants" class="compat-variants" hidden></ul>
+    <div id="compat-mods" class="compat-mods" hidden></div>
+
+    <div class="prose">
+      <h2>WHAT THE VERDICTS MEAN</h2>
+      <ul>
+        <li><strong>Factory flex-fuel</strong> — every version of the model is
+        E85-ready. Fill up, or better, <a href="./">blend to a target</a>.</li>
+        <li><strong>Flex-fuel on some engines</strong> — the model shipped both
+        ways; match the engine badge below the verdict to what's under your hood.</li>
+        <li><strong>Not factory E85</strong> — high blends need mods. The
+        <a href="e85-conversion-guide.html">conversion guide</a> covers exactly
+        what and roughly how much.</li>
+      </ul>
+
+      <h2>FAQ</h2>
+      <h3>What if I put E85 in a non-flex car by accident?</h3>
+      <p>One partial fill usually means a lean condition and a check-engine light,
+      not a dead engine. Top off with gasoline to dilute it and drive normally.
+      Don't make a habit of it.</p>
+      <h3>My model shows flex-fuel but my engine badge says mods needed — which wins?</h3>
+      <p>The engine. FFV packages were often tied to specific engines and trims —
+      the door-jamb sticker and the eighth digit of your VIN settle it.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn-neon" href="./">DIAL IN YOUR BLEND →</a>
+      <a class="btn-neon btn-magenta" href="e85-conversion-guide.html">NOT FLEX? CONVERSION GUIDE →</a>
+    </div>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <p>E85 BLEND LAB — tuned for the street. Not fueling advice; verify capacities &amp; compatibility in your owner's manual.</p>
+  <p class="aff-disclosure">As an Amazon Associate, this site earns from qualifying purchases.</p>
+</footer>
+
+<script src="vehicles.js"></script>
+<script src="app.js"></script>
+<script src="compat.js"></script>
+</body>
+</html>

@@ -278,17 +278,21 @@ async function epaMenu(path) {
     renderTankOffer();
   }
 
-  /* Offer to drop the matched tank size into the calculator's Setup panel. */
+  /* Offer to drop the matched tank size into the calculator's Setup panel —
+     or, on pages without the calculator (guides), deep-link it instead. */
   function renderTankOffer() {
     const match = findTankMatch(VEHICLES, el.year.value, el.make.value, el.model.value);
     if (!match) return;
+    const tankInput = document.getElementById("tank-size");
+    const action = tankInput
+      ? `<button type="button" id="compat-tank-btn" class="btn-neon">USE IN CALCULATOR</button>`
+      : `<a class="btn-neon" href="./?tank=${match.tank}">OPEN IN CALCULATOR</a>`;
     el.tank.innerHTML =
       `<span>Tank ≈ <strong>${match.tank.toFixed(1)} gal</strong> on this platform
-        (approximate — varies by trim).</span>
-       <button type="button" id="compat-tank-btn" class="btn-neon">USE IN CALCULATOR</button>`;
+        (approximate — varies by trim).</span>${action}`;
     el.tank.hidden = false;
+    if (!tankInput) return;
     document.getElementById("compat-tank-btn").addEventListener("click", () => {
-      const tankInput = document.getElementById("tank-size");
       tankInput.value = match.tank;
       tankInput.dispatchEvent(new Event("input", { bubbles: true }));
       const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
