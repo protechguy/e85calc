@@ -797,6 +797,21 @@ input[type="range"]::-moz-range-thumb {
   font-size: .82rem;
 }
 
+.aff-disclosure { margin: 8px 0 0; font-size: .74rem; opacity: .75; }
+
+.aff-link {
+  color: var(--amber);
+  text-decoration: underline;
+  text-decoration-color: #ffc14d55;
+  text-underline-offset: 3px;
+  transition: color .2s, text-decoration-color .2s;
+}
+
+.aff-link:hover, .aff-link:focus-visible {
+  color: #ffd98a;
+  text-decoration-color: var(--amber);
+}
+
 /* ── Inline SVG icons ───────────────────────────────────────────────── */
 .ico {
   width: 1em;
