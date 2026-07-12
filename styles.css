@@ -140,6 +140,39 @@ body::after {
   color: var(--text-dim);
 }
 
+/* page tabs */
+.site-nav {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+.nav-link {
+  font-family: var(--font-display);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color .2s, border-color .2s, box-shadow .2s;
+}
+
+.nav-link:hover, .nav-link:focus-visible {
+  color: var(--teal);
+  border-color: var(--teal);
+  box-shadow: 0 0 12px #3ee6e033;
+  outline: none;
+}
+
+.nav-link.is-current {
+  color: var(--amber);
+  border-color: var(--amber);
+  background: #ffc14d12;
+  box-shadow: 0 0 12px #ffc14d2b;
+}
+
 /* ── Layout ─────────────────────────────────────────────────────────── */
 .layout {
   position: relative;
@@ -619,6 +652,80 @@ input[type="range"]::-moz-range-thumb {
 .dot-existing { background: #454b6b; }
 .dot-e85 { background: var(--magenta); box-shadow: 0 0 6px #ff558588; }
 .dot-gas { background: var(--teal); box-shadow: 0 0 6px #3ee6e088; }
+
+/* ── Worth-it page: break-even stat & cost rows ─────────────────────── */
+.be-wrap {
+  text-align: center;
+  margin: 6px 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.be-label {
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .3em;
+  color: var(--text-dim);
+}
+
+.be-big {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  color: var(--green);
+  text-shadow: 0 0 28px #2bd96a55;
+}
+
+.be-note {
+  font-size: .84rem;
+  color: var(--text-dim);
+  max-width: 40ch;
+  margin: 0 auto;
+  line-height: 1.4;
+}
+
+.cost-rows { margin: 20px 0 4px; display: grid; gap: 13px; }
+
+.cost-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 4px 12px;
+  align-items: center;
+}
+
+.cost-name {
+  font-family: var(--font-display);
+  font-size: .62rem;
+  letter-spacing: .08em;
+  color: var(--text-dim);
+}
+
+.cost-bar {
+  height: 12px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--panel-deep);
+  overflow: hidden;
+}
+
+.cost-fill { height: 100%; border-radius: 6px; transition: width .35s cubic-bezier(.2,.8,.3,1); }
+.fill-pump  { background: #454b6b; }
+.fill-blend { background: linear-gradient(90deg, var(--teal-deep), var(--teal)); box-shadow: 0 0 10px #3ee6e044; }
+.fill-e85   { background: linear-gradient(90deg, #e03e70, var(--magenta-hot)); box-shadow: 0 0 10px #ff558544; }
+
+.cost-figs {
+  grid-column: 2;
+  font-size: .8rem;
+  color: var(--text-dim);
+}
+
+.cost-figs strong { color: var(--text); font-weight: 600; }
+
+.delta-note {
+  margin: 14px 0 0;
+  font-weight: 600;
+  color: var(--text);
+}
 
 /* ── Status & fine print ────────────────────────────────────────────── */
 .status {

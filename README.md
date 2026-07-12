@@ -33,6 +33,10 @@ tells you exactly how many gallons of E85 and pump gas to add.
   - **Web Serial** — Bluetooth *Classic* adapters (OBDLink MX+, most cheap
     ELM327s): pair in the OS first, then pick the COM port; also USB cables.
     Desktop only.
+- **Worth It? page** (`costs.html`) — enter local prices and your MPG to get
+  cost per mile for any blend, plus the one number that settles it: the
+  break-even E85 price. Below it, every blend saves money per mile (blending
+  is linear in both price and energy, so one threshold covers all targets).
 - Zero dependencies, zero build step — pure HTML/CSS/JS.
 
 ## Run it
@@ -91,8 +95,8 @@ curated dataset and says so.
 
 - ~~OBD-II ethanol readout via Web Bluetooth (flex-fuel vehicles, PID 0x52)~~
   — shipped, see "Read from car" above
+- ~~Cost-per-fill / cost-per-mile estimator~~ — shipped, see "Worth It?" above
 - Liters/metric mode
-- Cost-per-fill / cost-per-mile estimator
 
 ---
 
