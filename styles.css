@@ -4,6 +4,23 @@
    neon with a warm sunset accent.
    ═══════════════════════════════════════════════════════════════════════ */
 
+/* Self-hosted fonts (latin subsets) — no third-party connection before paint */
+@font-face {
+  font-family: "Righteous";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("righteous-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("outfit-latin.woff2") format("woff2");
+}
+
 :root {
   color-scheme: dark;        /* native controls (spinners, dropdowns) in dark */
   --magenta: #ff5585;        /* warm coral-magenta neon */

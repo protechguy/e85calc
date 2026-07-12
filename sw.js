@@ -1,11 +1,11 @@
-/* E85 Blend Lab — service worker: precache the app shell for offline use
-   at the pump. Same-origin files are served network-first (with a slow-
-   network timeout falling back to cache) so updates land on the next
-   load instead of lagging one refresh behind; fonts are cached
-   stale-while-revalidate. EPA API calls are cross-origin and
-   intentionally left network-only. */
+/* E85 Blend Lab — service worker: precache the app shell (self-hosted
+   fonts included) for offline use at the pump. Same-origin files are
+   served network-first (with a slow-network timeout falling back to
+   cache) so updates land on the next load instead of lagging one
+   refresh behind. EPA API calls are cross-origin and intentionally
+   left network-only. */
 
-const CACHE = "e85calc-v8";
+const CACHE = "e85calc-v9";
 const NETWORK_TIMEOUT_MS = 3500;
 const SHELL = [
   "./",
@@ -18,6 +18,8 @@ const SHELL = [
   "./obd.js",
   "./vehicles.js",
   "./icon.svg",
+  "./righteous-latin.woff2",
+  "./outfit-latin.woff2",
   "./manifest.webmanifest",
 ];
 
@@ -79,26 +81,9 @@ self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
 
   if (url.origin === location.origin) {
-    // Our own files: fresh when online, cached when offline or crawling.
+    // Our own files (fonts included, now self-hosted): fresh when online,
+    // cached when offline or crawling.
     e.respondWith(caches.open(CACHE).then((cache) => networkFirst(cache, e.request)));
-    return;
   }
-
-  // Google Fonts: stale-while-revalidate. Everything else (EPA) passes through.
-  const fontHost =
-    url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com";
-  if (!fontHost) return;
-
-  e.respondWith(
-    caches.open(CACHE).then(async (cache) => {
-      const cached = await cache.match(e.request);
-      const fresh = fetch(e.request)
-        .then((res) => {
-          if (res && (res.ok || res.type === "opaque")) cache.put(e.request, res.clone());
-          return res;
-        })
-        .catch(() => cached);
-      return cached || fresh;
-    })
-  );
+  // Cross-origin (EPA API) passes through untouched.
 });
