@@ -5,7 +5,7 @@
    stale-while-revalidate. EPA API calls are cross-origin and
    intentionally left network-only. */
 
-const CACHE = "e85calc-v7";
+const CACHE = "e85calc-v8";
 const NETWORK_TIMEOUT_MS = 3500;
 const SHELL = [
   "./",
@@ -22,7 +22,13 @@ const SHELL = [
 ];
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  // no-cache: precache from the origin, not the browser's HTTP cache —
+  // otherwise a stale long-max-age asset gets baked into the new shell.
+  e.waitUntil(
+    caches.open(CACHE)
+      .then((c) => c.addAll(SHELL.map((u) => new Request(u, { cache: "no-cache" }))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener("activate", (e) => {
@@ -52,7 +58,10 @@ function networkFirst(cache, request) {
       // No cached copy: keep waiting for the network to settle below.
     }, NETWORK_TIMEOUT_MS);
 
-    fetch(request)
+    // no-cache makes "network-first" true to its name: revalidate with the
+    // origin (cheap 304s via ETag) instead of trusting the HTTP cache,
+    // whose long CDN max-age otherwise pins users to a stale deploy.
+    fetch(new Request(request, { cache: "no-cache" }))
       .then((res) => {
         clearTimeout(timer);
         if (res && res.ok) cache.put(request, res.clone());

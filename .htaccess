@@ -1,0 +1,27 @@
+# E85 Blend Lab — origin config
+
+RewriteEngine On
+
+# Canonical host: www → apex
+RewriteCond %{HTTP_HOST} ^www\.e85calc\.com$ [NC]
+RewriteRule ^(.*)$ https://e85calc.com/$1 [R=301,L]
+
+# Canonical URL: /index.html → /
+RewriteCond %{THE_REQUEST} \s/index\.html[\s?] [NC]
+RewriteRule ^index\.html$ / [R=301,L]
+
+ErrorDocument 404 /404.html
+
+# Cache policy: HTML always revalidates; CSS/JS revalidate within minutes of
+# a deploy (cheap ETag 304s); images and fonts can live long.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|webmanifest|xml|txt)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=600, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "\.(png|svg|ico|ttf|woff2?)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
