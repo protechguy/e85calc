@@ -25,7 +25,7 @@ tells you exactly how many gallons of E85 and pump gas to add.
 - **Built for the pump** — installable PWA that works offline, remembers your
   last setup, and shows a sticky live-result bar on phones so you can watch the
   blend change while you drag sliders.
-- **Read from car (alpha)** — on flex-fuel vehicles, one tap reads the ECU's
+- **Read from car** — on flex-fuel vehicles, one tap reads the ECU's
   live ethanol % (OBD-II PID 0x52) and fuel level (PID 0x2F) and fills the
   calculator. Two transports, Chrome/Edge only (iOS has neither API):
   - **Web Bluetooth** — Bluetooth LE adapters (Veepeak BLE, vLinker MC+,
@@ -90,7 +90,7 @@ curated dataset and says so.
 ## Roadmap
 
 - ~~OBD-II ethanol readout via Web Bluetooth (flex-fuel vehicles, PID 0x52)~~
-  — shipped in alpha, see "Read from car" above
+  — shipped, see "Read from car" above
 - Liters/metric mode
 - Cost-per-fill / cost-per-mile estimator
 

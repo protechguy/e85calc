@@ -5,7 +5,7 @@
    stale-while-revalidate. EPA API calls are cross-origin and
    intentionally left network-only. */
 
-const CACHE = "e85calc-v4";
+const CACHE = "e85calc-v5";
 const NETWORK_TIMEOUT_MS = 3500;
 const SHELL = [
   "./",
