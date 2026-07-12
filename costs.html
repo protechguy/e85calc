@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Is E85 Worth It? — Cost per Mile &amp; Break-Even | E85 Blend Lab</title>
+<meta name="description" content="E85 costs less per gallon but carries less energy. Enter local prices and your MPG — get cost per mile for any blend and the break-even E85 price.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0c13">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Is E85 Worth It? — Cost per Mile &amp; Break-Even">
+<meta property="og:description" content="One number answers it: the break-even E85 price. Below it, every blend saves money per mile.">
+<meta property="og:url" content="https://protechguy.github.io/e85calc/costs.html">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+</head>
+<body>
+
+<noscript>
+  <p class="noscript-banner">This calculator needs JavaScript to run the cost math — enable it and reload.</p>
+</noscript>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <svg class="logo-cob" width="52" height="52" viewBox="0 0 72 72" aria-hidden="true"
+           fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <g class="cob-husk" stroke="#3ee6e0" stroke-width="3">
+          <path d="M31 62 C15 57 7 42 9 24 C15 39 22 51 33 57"/>
+          <path d="M41 62 C57 57 65 42 63 24 C57 39 50 51 39 57"/>
+        </g>
+        <g class="cob-body" stroke="#ffc14d" stroke-width="3" fill="#ffc14d0d">
+          <path d="M36 4 C45 4 49 14 49 32 C49 50 44 64 36 64 C28 64 23 50 23 32 C23 14 27 4 36 4 Z"/>
+        </g>
+        <g class="cob-kernels" stroke="#ffc14d" stroke-width="1.6" opacity=".75">
+          <path d="M31 7 C29.5 22 29.5 46 31.5 61"/>
+          <path d="M36 4.5 L36 64"/>
+          <path d="M41 7 C42.5 22 42.5 46 40.5 61"/>
+          <path d="M24.5 16 Q36 19.5 47.5 16"/>
+          <path d="M23.5 28 Q36 31.5 48.5 28"/>
+          <path d="M23.5 40 Q36 43.5 48.5 40"/>
+          <path d="M25 52 Q36 55 47 52"/>
+        </g>
+      </svg>
+      <h1><span class="plate">E85</span> BLEND LAB</h1>
+    </div>
+    <p class="tagline">STREET BLENDS &nbsp;•&nbsp; DIALED IN</p>
+    <nav class="site-nav" aria-label="Pages">
+      <a class="nav-link" href="./">BLEND CALC</a>
+      <a class="nav-link is-current" href="costs.html" aria-current="page">WORTH IT?</a>
+    </nav>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ══════════ INPUTS ══════════ -->
+  <section class="panel panel-inputs" aria-labelledby="prices-title">
+    <h2 id="prices-title" class="panel-title">PRICES &amp; YOUR RIG</h2>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="price-e85">E85 PRICE <span class="hint">$/gal</span></label>
+        <input type="number" id="price-e85" min="0" step="0.01" value="2.79" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label for="price-pump">PUMP GAS PRICE <span class="hint">$/gal</span></label>
+        <input type="number" id="price-pump" min="0" step="0.01" value="3.49" inputmode="decimal">
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="pump-type">PUMP GAS TYPE</label>
+        <select id="pump-type">
+          <option value="e10" selected>E10 (most pump gas)</option>
+          <option value="e0">E0 (ethanol-free)</option>
+          <option value="e15">E15</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="pump-eth">PUMP ETHANOL %</label>
+        <input type="number" id="pump-eth" min="0" max="100" step="1" value="10" disabled inputmode="numeric">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="e85-eth">E85 PUMP ACTUAL ETHANOL <output id="e85-eth-out" for="e85-eth">E85</output></label>
+      <input type="range" id="e85-eth" min="51" max="98" step="1" value="85">
+      <p class="hint-block">“E85” at the pump legally ranges E51–E83 by season — test it if you can.</p>
+    </div>
+
+    <div class="field">
+      <label for="base-mpg">YOUR MPG ON PUMP GAS <span class="hint">highway/mixed, your call</span></label>
+      <input type="number" id="base-mpg" min="1" max="99" step="0.1" value="20" inputmode="decimal">
+    </div>
+
+    <div class="field field-target">
+      <label for="target-eth">TARGET BLEND <output id="target-eth-out" for="target-eth">E30</output></label>
+      <input type="range" id="target-eth" min="10" max="98" step="1" value="30" class="target-slider">
+    </div>
+  </section>
+
+  <!-- ══════════ VERDICT ══════════ -->
+  <section class="panel panel-results" aria-labelledby="verdict-title">
+    <h2 id="verdict-title" class="panel-title">WORTH IT?</h2>
+
+    <div class="be-wrap">
+      <span class="be-label">E85 BREAKS EVEN AT</span>
+      <span id="be-price" class="be-big">$—</span>
+      <span id="be-note" class="be-note"></span>
+    </div>
+
+    <p id="verdict-msg" class="status ok" role="status"></p>
+
+    <div id="cost-rows" class="cost-rows" aria-label="Cost per mile comparison"></div>
+    <p id="delta-1k" class="delta-note"></p>
+
+    <p class="fine-print">
+      Assumes MPG scales with fuel energy (pure ethanol ≈ 33% less than gasoline)
+      — a solid rule of thumb, though ethanol-tuned engines often claw a few
+      percent back. Blend price assumes you mix at the pump from the two fuels
+      above. Octane, cooling, and power are why most people run E85 — economy is
+      the bonus question this page answers.
+    </p>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>E85 BLEND LAB — tuned for the street. Not fueling advice; verify capacities &amp; compatibility in your owner's manual.</p>
+  <p class="aff-disclosure">As an Amazon Associate, this site earns from qualifying purchases.</p>
+</footer>
+
+<script src="costs.js"></script>
+</body>
+</html>
