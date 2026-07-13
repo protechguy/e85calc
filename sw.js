@@ -5,7 +5,7 @@
    refresh behind. EPA API calls are cross-origin and intentionally
    left network-only. */
 
-const CACHE = "e85calc-v10";
+const CACHE = "e85calc-v11";
 const NETWORK_TIMEOUT_MS = 3500;
 const SHELL = [
   "./",

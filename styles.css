@@ -168,10 +168,11 @@ h1.panel-title { font-size: 1.35rem; letter-spacing: .14em; line-height: 1.35; }
 }
 
 .nav-link {
-  font-family: var(--font-display);
-  font-size: .68rem;
-  letter-spacing: .12em;
-  padding: 8px 16px;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: .78rem;
+  letter-spacing: .08em;
+  padding: 12px 18px;
   border-radius: 20px;
   border: 1px solid var(--line);
   color: var(--text-dim);
@@ -246,7 +247,49 @@ h1.panel-title { font-size: 1.35rem; letter-spacing: .14em; line-height: 1.35; }
   color: var(--text);
 }
 
-.panel-title .num { display: none; }
+/* setup-panel group labels: quiet wayfinding between field clusters */
+.group-label {
+  margin: 26px 0 14px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: .72rem;
+  letter-spacing: .22em;
+  color: var(--text-dim);
+}
+
+.panel-title + .restored-note + .group-label,
+.panel-title + .group-label {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* restored-state cue + reset */
+.restored-note {
+  margin: -10px 0 16px;
+  font-size: .82rem;
+  color: var(--text-dim);
+}
+
+.btn-link {
+  font: inherit;
+  font-weight: 600;
+  color: var(--teal);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: #3ee6e055;
+  text-underline-offset: 3px;
+}
+
+.btn-link:hover, .btn-link:focus-visible {
+  text-decoration-color: var(--teal);
+  outline: none;
+}
 
 .panel-title::after {
   content: "";
@@ -290,10 +333,10 @@ h1.panel-title { font-size: 1.35rem; letter-spacing: .14em; line-height: 1.35; }
 .veh-note:empty { display: none; }
 
 .badge, .badge-tank {
-  font-family: var(--font-display);
-  font-size: .6rem;
-  font-weight: 400;
-  letter-spacing: .1em;
+  font-family: var(--font-ui);
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .08em;
   padding: 5px 10px;
   border-radius: 20px;
   white-space: nowrap;
@@ -399,7 +442,7 @@ input[type="range"] {
   background: transparent;
   outline: none;
   cursor: pointer;
-  touch-action: manipulation;
+  touch-action: pan-y; /* vertical swipes scroll the page; horizontal adjusts */
 }
 
 input[type="range"]:focus-visible {
@@ -444,6 +487,20 @@ input[type="range"]::-moz-range-thumb {
 /* target slider keeps its blend-spectrum gradient instead of a fill */
 .target-slider {
   --track: linear-gradient(90deg, #1d4a48, #7a4327, #8f2f4a);
+}
+
+/* the target is the tool's central decision: give it its own surface */
+.field-target {
+  padding: 16px 16px 8px;
+  border: 1px solid #3ee6e04d;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff06, transparent 60%), #0d2321;
+  box-shadow: 0 0 18px #3ee6e01a, inset 0 1px 0 #ffffff0d;
+}
+
+.field-target output {
+  font-size: 1.15rem;
+  text-shadow: 0 0 14px #3ee6e055;
 }
 
 /* ── Tube-tester helper ─────────────────────────────────────────────── */
@@ -586,9 +643,9 @@ input[type="range"]::-moz-range-thumb {
 
 .gauge-label {
   display: block;
-  font-size: .66rem;
+  font-size: .74rem;
   font-weight: 600;
-  letter-spacing: .34em;
+  letter-spacing: .26em;
   color: var(--text-dim);
   margin-top: 4px;
 }
@@ -613,9 +670,9 @@ input[type="range"]::-moz-range-thumb {
 
 .order-label {
   display: block;
-  font-size: .66rem;
+  font-size: .72rem;
   font-weight: 600;
-  letter-spacing: .24em;
+  letter-spacing: .2em;
   color: var(--text-dim);
   margin-bottom: 5px;
 }
@@ -835,10 +892,11 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .btn-neon {
-  font-family: var(--font-display);
-  font-size: .68rem;
-  letter-spacing: .12em;
-  padding: 9px 16px;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: .75rem;
+  letter-spacing: .08em;
+  padding: 10px 16px;
   border-radius: 20px;
   border: 1px solid var(--teal);
   background: transparent;
@@ -1149,6 +1207,62 @@ a.btn-magenta:hover, a.btn-magenta:focus-visible {
 }
 
 .guide-list .g-desc { display: block; font-size: .88rem; color: var(--text-dim); line-height: 1.45; }
+
+/* ── Critique-pass components ───────────────────────────────────────── */
+
+/* quick-bar warning state: clamped or impossible blends must be visible
+   at the point of action, which on mobile is this bar */
+.quickbar.qb-warn {
+  border-color: #ffc14d66;
+  background: #221a08ee;
+  box-shadow: 0 12px 40px #000000c0, 0 0 18px #ffc14d22, inset 0 1px 0 #ffffff0d;
+}
+
+.quickbar.qb-warn .quickbar-blend {
+  color: var(--amber);
+  text-shadow: 0 0 12px #ffc14d55;
+}
+
+.qb-alert {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--amber);
+  color: #221a08;
+  font-weight: 700;
+  font-size: .8rem;
+  flex-shrink: 0;
+}
+
+/* dashed order cards: no confident command when the math says stop */
+.order-dash { color: var(--text-dim); }
+.orders-muted .order-card { opacity: .55; box-shadow: none; }
+
+/* break-even hero number carries the verdict, not a permanent green */
+.be-big.be-warn { color: var(--amber); text-shadow: 0 0 28px #ffc14d55; }
+
+/* typed values outside a field's stated range get a visible nudge */
+input[type="number"]:out-of-range {
+  border-color: #ffc14d88 !important;
+  box-shadow: 0 0 0 3px #ffc14d2e;
+}
+
+/* articles keep clean titles; the gradient underline is the tools' accent */
+.panel-article .panel-title::after { display: none; }
+
+/* OBD helper lives inside a details like the tester */
+.tester .obd-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-top: 12px;
+}
+
+.tester .obd-status { margin: 10px 0 0; }
 
 /* ── Motion preferences ─────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

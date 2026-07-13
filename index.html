@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#0a0c13">
 <meta property="og:type" content="website">
 <meta property="og:title" content="E85 Blend Lab — Ethanol Mix Calculator">
-<meta property="og:description" content="Dial in your target ethanol blend: tank size, fuel level, pump gas, seasonal E85 — it tells you exactly what to pump.">
+<meta property="og:description" content="Dial in your target ethanol blend from tank size, fuel level, pump gas, and seasonal E85. It tells you exactly what to pump.">
 <meta property="og:url" content="https://e85calc.com/">
 <meta property="og:image" content="https://e85calc.com/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -28,7 +28,7 @@
   "@type": "WebApplication",
   "name": "E85 Blend Lab",
   "url": "https://e85calc.com/",
-  "description": "Free E85 blend calculator: dial in your target ethanol mix from tank size, fuel level, and pump fuel — with factory flex-fuel lookup and OBD-II readout.",
+  "description": "Free E85 blend calculator: dial in your target ethanol mix from tank size, fuel level, and pump fuel, with factory flex-fuel lookup and OBD-II readout.",
   "applicationCategory": "UtilityApplication",
   "operatingSystem": "Any",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
@@ -39,7 +39,7 @@
 <body>
 
 <noscript>
-  <p class="noscript-banner">This calculator needs JavaScript to run the blend math — enable it and reload.</p>
+  <p class="noscript-banner">This calculator needs JavaScript to run the blend math. Enable it and reload.</p>
 </noscript>
 
 <header class="site-header">
@@ -81,8 +81,15 @@
   <section class="panel panel-inputs" aria-labelledby="inputs-title">
     <h2 id="inputs-title" class="panel-title">SETUP</h2>
 
+    <p id="restored-note" class="restored-note" hidden>
+      Restored your last setup.
+      <button type="button" id="reset-defaults" class="btn-link">Reset to defaults</button>
+    </p>
+
+    <h3 class="group-label">YOUR TANK</h3>
+
     <fieldset class="veh-picker">
-      <legend>VEHICLE <span class="optional">(optional — auto-fills tank size)</span></legend>
+      <legend>VEHICLE <span class="optional">(optional: auto-fills tank size)</span></legend>
       <div class="veh-row">
         <select id="veh-year" aria-label="Vehicle year">
           <option value="">Year</option>
@@ -96,29 +103,6 @@
       </div>
       <div id="veh-note" class="veh-note" role="status"></div>
     </fieldset>
-
-    <!-- OBD-II readout — only revealed where Web Bluetooth / Web Serial exist -->
-    <div id="obd-reader" class="obd-reader" hidden>
-      <div class="obd-row">
-        <button type="button" id="obd-btn" class="btn-neon">
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10-5 5V2l5 5L7 17"/></svg>
-          READ FROM CAR
-        </button>
-        <button type="button" id="obd-serial-btn" class="btn-neon" hidden>
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9z"/><path d="M8 9V6m8 3V6M12 17v4"/></svg>
-          PAIRED / SERIAL ADAPTER
-        </button>
-        <span class="optional">fills tank mix &amp; fuel level from the ECU</span>
-      </div>
-      <p id="obd-status" class="obd-status" role="status"></p>
-      <p class="hint-block">
-        Ignition on. Bluetooth&nbsp;LE adapters (Veepeak BLE, vLinker MC+, OBDLink&nbsp;CX)
-        use READ FROM CAR. Classic-Bluetooth adapters (OBDLink&nbsp;MX+ and most ELM327s):
-        pair in Windows/macOS Bluetooth settings first, then use PAIRED&nbsp;/&nbsp;SERIAL
-        ADAPTER — desktop only. Ethanol readout is a flex-fuel thing.
-        No adapter? <a class="aff-link" href="https://www.amazon.com/s?k=bluetooth+le+obd2+adapter&amp;tag=dosecomp-20" target="_blank" rel="sponsored noopener">Grab a Bluetooth&nbsp;LE OBD-II adapter on Amazon</a>.
-      </p>
-    </div>
 
     <div class="field">
       <label for="tank-size">TANK SIZE <span class="hint">US gallons</span></label>
@@ -134,6 +118,8 @@
       <label for="current-eth">ETHANOL % OF FUEL IN TANK <span class="hint">what's already in there</span></label>
       <input type="number" id="current-eth" min="0" max="100" step="1" value="10" inputmode="numeric">
     </div>
+
+    <h3 class="group-label">THE PUMPS</h3>
 
     <div class="field-row">
       <div class="field">
@@ -168,13 +154,41 @@
     <div class="field">
       <label for="e85-eth">E85 PUMP ACTUAL ETHANOL <output id="e85-eth-out" for="e85-eth">E85</output></label>
       <input type="range" id="e85-eth" min="51" max="98" step="1" value="85">
-      <p class="hint-block">“E85” at the pump legally ranges E51–E83 by season — test it if you can.</p>
+      <p class="hint-block">“E85” at the pump legally ranges E51–E83 by season. Test it if you can.</p>
     </div>
+
+    <h3 class="group-label">TARGET</h3>
 
     <div class="field field-target">
       <label for="target-eth">TARGET BLEND <output id="target-eth-out" for="target-eth">E30</output></label>
       <input type="range" id="target-eth" min="10" max="98" step="1" value="30" class="target-slider">
     </div>
+
+    <!-- OBD-II readout: only revealed where Web Bluetooth / Web Serial exist -->
+    <details class="tester" id="obd-reader" hidden>
+      <summary>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10-5 5V2l5 5L7 17"/></svg>
+        READ FROM CAR <span class="optional">fills tank mix &amp; fuel level from the ECU</span>
+      </summary>
+      <div class="obd-row">
+        <button type="button" id="obd-btn" class="btn-neon">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10-5 5V2l5 5L7 17"/></svg>
+          READ FROM CAR
+        </button>
+        <button type="button" id="obd-serial-btn" class="btn-neon" hidden>
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9z"/><path d="M8 9V6m8 3V6M12 17v4"/></svg>
+          PAIRED / SERIAL ADAPTER
+        </button>
+      </div>
+      <p id="obd-status" class="obd-status" role="status"></p>
+      <p class="hint-block">
+        Ignition on. Bluetooth&nbsp;LE adapters connect straight from this page with
+        READ FROM CAR. Classic-Bluetooth adapters like the OBDLink&nbsp;MX+ pair with
+        your computer first, then use PAIRED&nbsp;/&nbsp;SERIAL ADAPTER (desktop only).
+        Ethanol readout needs a flex-fuel car.
+        No adapter? <a class="aff-link" href="https://www.amazon.com/s?k=bluetooth+le+obd2+adapter&amp;tag=dosecomp-20" target="_blank" rel="sponsored noopener">Grab a Bluetooth&nbsp;LE OBD-II adapter on Amazon</a>.
+      </p>
+    </details>
 
     <details class="tester">
       <summary>
@@ -183,8 +197,8 @@
       </summary>
       <p class="hint-block">
         Fill the tube with water to a line, top up with fuel, cap and shake, then
-        let it settle. Ethanol bonds to the water and raises the separation line —
-        enter the three readings and skip the printed scale.
+        let it settle. Ethanol bonds to the water and raises the separation line.
+        Enter the three readings and skip the printed scale.
       </p>
       <div class="tester-row">
         <div class="field">
@@ -205,8 +219,8 @@
         <button type="button" id="test-use-e85" class="btn-neon" disabled>USE FOR E85 PUMP</button>
         <button type="button" id="test-use-tank" class="btn-neon" disabled>USE FOR TANK MIX</button>
       </div>
-      <p class="hint-block">Approximate — ignores the small volume shrink when water and ethanol mix, same as most testers' printed scales.</p>
-      <p class="hint-block">No tester yet? <a class="aff-link" href="https://www.amazon.com/s?k=e85+ethanol+fuel+test+kit&amp;tag=dosecomp-20" target="_blank" rel="sponsored noopener">Grab a tube tester on Amazon</a> — a few bucks, lives in the glovebox.</p>
+      <p class="hint-block">Approximate: it ignores the small volume shrink when water and ethanol mix, same as most testers' printed scales.</p>
+      <p class="hint-block">No tester yet? <a class="aff-link" href="https://www.amazon.com/s?k=e85+ethanol+fuel+test+kit&amp;tag=dosecomp-20" target="_blank" rel="sponsored noopener">Grab a tube tester on Amazon</a>. A few bucks, lives in the glovebox.</p>
     </details>
   </section>
 
@@ -271,8 +285,8 @@
     <p id="status-msg" class="status ok" role="status"></p>
 
     <p class="fine-print">
-      Blend after fill: <strong id="final-blend">E30</strong> across
-      <strong id="final-total">16.0 gal</strong> in the tank. Estimates only — always verify
+      After the fill: <strong id="final-total">16.0 gal</strong> in the tank at
+      <strong id="final-blend">E30</strong>. Estimates only. Always verify
       your fuel system, tune, and ethanol content before running high blends.
     </p>
   </section>
@@ -281,7 +295,7 @@
   <section class="panel panel-compat" aria-labelledby="compat-title">
     <h2 id="compat-title" class="panel-title">CAN IT RUN E85?</h2>
     <p class="compat-intro">
-      Factory flex-fuel lookup, engine by engine — live from EPA fuel-economy
+      Factory flex-fuel lookup, engine by engine, live from EPA fuel-economy
       data covering every US-market vehicle since 1984.
     </p>
 
@@ -307,6 +321,7 @@
 </main>
 
 <button type="button" id="quickbar" class="quickbar" aria-label="Jump to results">
+  <span id="qb-alert" class="qb-alert" hidden aria-hidden="true">!</span>
   <span id="qb-blend" class="quickbar-blend">E30</span>
   <span class="quickbar-adds">
     <span class="qb-e85">E85 <span id="qb-e85">0.0</span> gal</span>

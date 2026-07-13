@@ -123,6 +123,9 @@ const EL_IDS = {
   qbBlend: "qb-blend",
   qbE85: "qb-e85",
   qbGas: "qb-gas",
+  qbAlert: "qb-alert",
+  restoredNote: "restored-note",
+  resetBtn: "reset-defaults",
 };
 
 const els = {}; // bound to DOM nodes in init()
@@ -209,19 +212,19 @@ function setGauge(frac) {
 /* ── Recalculate & render ─────────────────────────────────────────────── */
 const STATUS_TEXT = {
   ok: { cls: "ok", msg: "Dialed in. Pump the amounts above and roll out." },
-  tank_full: { cls: "warn", msg: "Tank is already full — burn some fuel before blending." },
-  no_add: { cls: "warn", msg: "Adding zero gallons — the blend stays at what's already in the tank." },
+  tank_full: { cls: "warn", msg: "Tank is already full. Burn some fuel before blending." },
+  no_add: { cls: "warn", msg: "Adding zero gallons, so the blend stays at what's already in the tank." },
   bad_mix: {
     cls: "warn",
-    msg: "Pump-gas ethanol is at or above the E85 pump's — the two fuels can't steer the blend. Check those inputs (they may be swapped).",
+    msg: "Pump-gas ethanol is at or above the E85 pump's, so the two fuels can't steer the blend. Check those inputs (they may be swapped).",
   },
   target_below: {
     cls: "warn",
-    msg: "The fuel already in your tank is richer than the target — even topping off with pure pump gas lands above it. Shown is the leanest blend you can reach without draining.",
+    msg: "The fuel already in your tank is richer than the target: even topping off with pure pump gas lands above it. Shown is the leanest blend you can reach without draining.",
   },
   target_above: {
     cls: "warn",
-    msg: "Target is out of reach — even filling every remaining gallon with E85 falls short. Shown is the richest blend you can reach right now.",
+    msg: "Target is out of reach: even filling every remaining gallon with E85 falls short. Shown is the richest blend you can reach right now.",
   },
 };
 
@@ -288,8 +291,12 @@ function recalc() {
 
   const r = calcBlend(inputs);
 
-  els.addE85.innerHTML = fmtGal(r.e85Gal);
-  els.addGas.innerHTML = fmtGal(r.gasGal);
+  // In bad_mix the gallon split is meaningless; dash it rather than issue a
+  // confident wrong command. Clamped statuses keep values: still actionable.
+  const dashOrders = r.status === "bad_mix";
+  els.addE85.innerHTML = dashOrders ? `<span class="order-dash">—</span>` : fmtGal(r.e85Gal);
+  els.addGas.innerHTML = dashOrders ? `<span class="order-dash">—</span>` : fmtGal(r.gasGal);
+  document.querySelector(".orders").classList.toggle("orders-muted", dashOrders);
   els.finalBlend.textContent = `E${Math.round(r.finalEth * 100)}`;
   els.finalTotal.textContent = `${r.totalGal.toFixed(1)} gal`;
 
@@ -319,6 +326,15 @@ function setQuickbar(r) {
     els.qbBlend.textContent = `E${Math.round(r.finalEth * 100)}`;
     els.qbE85.textContent = r.e85Gal.toFixed(1);
     els.qbGas.textContent = r.gasGal.toFixed(1);
+    // Mirror warnings, not just numbers: a clamped or impossible blend must
+    // be visible at the point of action, which on mobile is this bar.
+    const warn = r.status !== "ok";
+    els.quickbar.classList.toggle("qb-warn", warn);
+    els.qbAlert.hidden = !warn;
+    els.quickbar.setAttribute(
+      "aria-label",
+      warn ? "Jump to results: check the warning" : "Jump to results"
+    );
   }
   updateQuickbarVisibility();
 }
@@ -361,11 +377,19 @@ function saveState() {
 function restoreState() {
   try {
     const state = JSON.parse(localStorage.getItem(STORE_KEY));
-    if (!state) return;
+    if (!state) return false;
     PERSIST_KEYS.forEach((k) => {
       if (state[k] != null) els[k].value = state[k];
     });
-  } catch { /* corrupt or unavailable — defaults are fine */ }
+    return true;
+  } catch {
+    return false; // corrupt or unavailable; defaults are fine
+  }
+}
+
+function resetDefaults() {
+  try { localStorage.removeItem(STORE_KEY); } catch { /* nothing to clear */ }
+  location.href = "./"; // also drops any ?tank/?target presets
 }
 
 /* URL presets (?tank=23&target=30) — guide pages deep-link the calculator.
@@ -434,9 +458,14 @@ function init() {
   if (!els.tank) return; // guide pages load app.js only for shared icons
 
   populateYears();
-  restoreState();
+  const restored = restoreState();
   applyUrlParams();
   applyPumpType();
+
+  // Restored state is easy to miss and easy to compute against by mistake:
+  // say so, and offer the way back.
+  if (restored) els.restoredNote.hidden = false;
+  els.resetBtn.addEventListener("click", resetDefaults);
 
   els.year.addEventListener("change", () => { refreshMakes(); });
   els.make.addEventListener("change", () => { refreshModels(); });

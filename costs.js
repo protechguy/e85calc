@@ -153,14 +153,14 @@ function breakEvenE85Price(pumpPrice, pumpEth, e85Eth) {
       els.delta1k.textContent = "";
       els.verdict.className = "status warn";
       els.verdict.textContent = frac == null
-        ? "Pump-gas ethanol is at or above the E85 pump's — check those two inputs."
+        ? "Pump-gas ethanol is at or above the E85 pump's. Check those two inputs."
         : "Enter both prices and your MPG to run the numbers.";
       return;
     }
 
     const be = breakEvenE85Price(pricePump, pumpEth, e85Eth);
     els.bePrice.textContent = money(be);
-    els.beNote.textContent = `with pump gas at ${money(pricePump)} — and it's the same threshold for every target blend`;
+    els.beNote.textContent = `with pump gas at ${money(pricePump)}, and it's the same threshold for every target blend`;
 
     const mpgBlend = estMpg(baseMpg, targetEth, pumpEth);
     const mpgE85 = estMpg(baseMpg, e85Eth, pumpEth);
@@ -182,10 +182,13 @@ function breakEvenE85Price(pumpPrice, pumpEth, e85Eth) {
       : `Running E${els.target.value} costs about ${money(delta)} more per 1,000 miles vs pump gas.`;
 
     const saves = priceE85 < be;
+    // The hero number carries the verdict's color: green only when it's
+    // actually good news.
+    els.bePrice.classList.toggle("be-warn", !saves);
     els.verdict.className = `status ${saves ? "ok" : "warn"}`;
     els.verdict.textContent = saves
-      ? `At ${money(priceE85)}, E85 is under the break-even price — every blend is cheaper per mile than pump gas. Fill away.`
-      : `At ${money(priceE85)}, E85 is over the break-even price — blends cost more per mile. You're paying for octane, not economy.`;
+      ? `At ${money(priceE85)}, E85 is under the break-even price: every blend is cheaper per mile than pump gas. Fill away.`
+      : `At ${money(priceE85)}, E85 is over the break-even price, so blends cost more per mile. You're paying for octane, not economy.`;
   }
 
   function init() {
